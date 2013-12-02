@@ -33,7 +33,7 @@ import javax.swing.JTextArea;
 
 public class eMafiaClientUpdater extends JFrame{
 	private static final long serialVersionUID = 1L;
-	private String updateURL = "http://hikaritemple.com/eMafia/";
+	private String updateURL = "http://inverseinnovations.com/eMafia/";
 	private String rootFolder = System.getProperty("user.dir");
 	private String updateFolder = rootFolder+"/_update";
 	private int updateVersion;
