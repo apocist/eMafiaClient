@@ -1,0 +1,39 @@
+-Connection-
+
+[000] First Connected
+[001](*FINAL) awaiting password..adding FINAL erases password from client
+[002] PING/Are Your There?(requests server or client to send a MSG RCVed)(TODO)
+[003] Login Prompt
+[004] New Account Prompt/Register
+[005] Confirm account name (YES)
+
+
+-Close Layers
+
+[100]login 						close login window
+[100]lobbyMatchList 				close lobbyMatchList window
+[100]lobbyChatWindow 				close lobbyChatWindow window
+
+-Lobby Commands-
+
+[200] 							enter main lobby- open lobbychat + matchList
+[201]sendermessage 				recieved lobby/matchLobby msg..place in chat
+[203]1player2player3player	refreshed lobby player list
+[204]player						add to player list
+[205]player						remove player from player list
+[212]1match10152match2515	refreshed match list(matchId,name,minPlay,maxPlay)
+
+-Match Commands-
+
+[250] 							enter a match- open matchSetup
+[251]								get all match settings -> MatchData(try avoid using more than once)
+
+-Potential Future Commands-
+
+[247] Echo(client pings back saying the messgae was recieved) FAKE
+[249]String Prompt (string)    [249]Username:[249]Password: FAKE
+
+-Error Msgs as follows:-
+
+
+[999]MESSAGE Generic Prompt
