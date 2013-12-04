@@ -165,8 +165,7 @@ public class BackgroundPanel extends JPanel{
 	{
 		if (image == null)
 			return super.getPreferredSize();
-		else
-			return new Dimension(image.getWidth(null), image.getHeight(null));
+		return new Dimension(image.getWidth(null), image.getHeight(null));
 	}
 
 	/**
