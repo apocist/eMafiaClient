@@ -23,7 +23,7 @@ public class Framework {
 
 	public void connect() {
 		//Telnet.connect("127.0.0.1", "3689");
-		Telnet.connect("www.hikaritemple.com", "3689");
+		Telnet.connect("www.inverseinnovations.com", "3689");
 	}
 
 	public static void main(String[] args) {
