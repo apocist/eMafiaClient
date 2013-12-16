@@ -115,7 +115,13 @@ public class eMafiaClientUpdater extends JFrame{
 		doneBut.setVisible(false);
 		doneBut.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				//starteMafia();
+				String[] run = {"java","-jar","/eMafia.jar"};
+		        try {
+		            Runtime.getRuntime().exec(run);
+		        } catch (Exception ex) {
+		            ex.printStackTrace();
+		        }
+		        System.exit(0);
 			}
 		});
 		donePanel.add(doneBut);

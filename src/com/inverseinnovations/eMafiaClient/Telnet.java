@@ -170,6 +170,9 @@ public class Telnet {
 			switch (data.getCommand()) {
 			// -Connection-// 0 - 9
 			case "Connection":// connected/handshake
+				if(Integer.parseInt(data.getString()) >= Framework.Settings.CLIENT_BUILD){
+					Framework.update();
+				}
 				break;
 			case "Password":// Asking for password..if FINAL, remove from client
 				if (var1 == null)
