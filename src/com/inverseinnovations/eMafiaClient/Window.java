@@ -10,6 +10,7 @@ import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Frame;
+import java.awt.Label;
 import java.awt.Point;
 import java.awt.event.*;
 import java.net.URI;
@@ -219,6 +220,9 @@ public class Window extends Frame {
 			break;
 		case "roleSetupNonHost":
 			frame = window_roleSetupNonHost(layer);
+			break;
+		case "orderOfOps":
+			frame = window_orderOfOps(layer);
 			break;
 		case "roleView":
 			frame = window_roleView(parameters, layer);
@@ -973,11 +977,8 @@ public class Window extends Frame {
 		return frame;
 	}
 
-	private JAutoPanel window_roleMenu(final Integer layer) {// Lists off
-																// 'roleSetup'
-																// and
-																// 'rolePossible'
-																// for host only
+	private JAutoPanel window_roleMenu(final Integer layer) {
+		// Lists off 'roleSetup' and 'rolePossible' for host only
 		JAutoPanel frame = new JAutoPanel(this.desktop);
 		JPanel mainPanel = new JPanel();
 		JButton setupBut = new JButton("<html>Role Setup</html>");
@@ -987,8 +988,7 @@ public class Window extends Frame {
 				Framework.Window.createIFrame("roleSetupHost");
 			}
 		});
-		JButton possibleBut = new JButton(
-				"<html><font size=\"1\">Roles Possible</font></html>");
+		JButton possibleBut = new JButton("<html><font size=\"1\">Roles Possible</font></html>");
 		possibleBut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				deleteIFrame(layer);// delets self
@@ -996,6 +996,14 @@ public class Window extends Frame {
 			}
 		});
 		possibleBut.setPreferredSize(new Dimension(15, 10));
+		JButton orderofOpsBut = new JButton("<html><font size=\"1\">Roles Possible</font></html>");
+		orderofOpsBut.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				deleteIFrame(layer);// delets self
+				Framework.Window.createIFrame("orderOfOps");
+			}
+		});
+		orderofOpsBut.setPreferredSize(new Dimension(15, 10));
 		JButton dialogOKBut = new JButton("DONE");// XXX need resize this button
 		dialogOKBut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
@@ -1008,6 +1016,7 @@ public class Window extends Frame {
 		// mainPanel.add(roleSearchPanel);
 		mainPanel.add(setupBut);
 		mainPanel.add(possibleBut);
+		mainPanel.add(orderofOpsBut);
 		mainPanel.add(dialogOKBut);
 
 		frame.add(mainPanel);
@@ -1026,16 +1035,7 @@ public class Window extends Frame {
 		roleSearchPanel.add(searchPane);
 
 		Framework.Telnet.write("-rolespossible list");
-		Framework.Data.curMatch.rolesPossibleList
-				.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		Framework.Data.curMatch.rolesPossibleList
-				.setLayoutOrientation(JList.VERTICAL);
-		Framework.Data.curMatch.rolesPossibleList.setBackground(new Color(32,
-				32, 32));
-		Framework.Data.curMatch.rolesPossibleList
-				.setCellRenderer(Framework.Window.CellRenderer.new RoleList());
-		JScrollPane rolesPossibleScrollpane = new JScrollPane(
-				Framework.Data.curMatch.rolesPossibleList);
+		JScrollPane rolesPossibleScrollpane = new JScrollPane(Framework.Data.curMatch.rolesPossibleList);
 		rolesPossibleScrollpane.setSize(115, 150);
 		JButton clearBut = new JButton("Clear");
 		clearBut.addActionListener(new ActionListener() {
@@ -1107,16 +1107,7 @@ public class Window extends Frame {
 
 		// Roles Possible
 		Framework.Telnet.write("-rolespossible list");
-		/*
-		 * Framework.Data.curMatch.rolesPossibleList.setSelectionMode(
-		 * ListSelectionModel.SINGLE_SELECTION);
-		 * Framework.Data.curMatch.rolesPossibleList
-		 * .setLayoutOrientation(JList.VERTICAL);
-		 * Framework.Data.curMatch.rolesPossibleList.setBackground(new
-		 * Color(32,32,32));
-		 * Framework.Data.curMatch.rolesPossibleList.setCellRenderer
-		 * (Framework.Window.CellRenderer.new RoleList());
-		 */
+
 		JScrollPane rolesPossibleScrollpane = new JScrollPane(
 				Framework.Data.curMatch.rolesPossibleList);
 		rolesPossibleScrollpane.setSize(115, 150);
@@ -1157,18 +1148,7 @@ public class Window extends Frame {
 
 		// Roles Setup
 		Framework.Telnet.write("-rolesetup list");
-		/*
-		 * Framework.Data.curMatch.roleSetupList.setSelectionMode(ListSelectionModel
-		 * .SINGLE_SELECTION);
-		 * Framework.Data.curMatch.roleSetupList.setLayoutOrientation
-		 * (JList.VERTICAL);
-		 * Framework.Data.curMatch.roleSetupList.setBackground(new
-		 * Color(32,32,32));
-		 * Framework.Data.curMatch.roleSetupList.setCellRenderer
-		 * (Framework.Window.CellRenderer.new RoleSetupList());
-		 */
-		JScrollPane roleSetupScrollpane = new JScrollPane(
-				Framework.Data.curMatch.roleSetupList);
+		JScrollPane roleSetupScrollpane = new JScrollPane(Framework.Data.curMatch.roleSetupList);
 		roleSetupScrollpane.setSize(115, 150);
 		JButton clearBut = new JButton("Clear");
 		clearBut.addActionListener(new ActionListener() {
@@ -1212,7 +1192,7 @@ public class Window extends Frame {
 		addRemovePanel.add(removeBut);
 
 		JButton dialogDoneBut = new JButton("Done");// XXX need resize this
-													// button
+
 		dialogDoneBut.setAction(new AbstractAction("Done") {
 			private static final long serialVersionUID = 1L;
 
@@ -1241,16 +1221,6 @@ public class Window extends Frame {
 
 		// Roles Possible
 		Framework.Telnet.write("-rolespossible list");
-		/*
-		 * Framework.Data.curMatch.rolesPossibleList.setSelectionMode(
-		 * ListSelectionModel.SINGLE_SELECTION);
-		 * Framework.Data.curMatch.rolesPossibleList
-		 * .setLayoutOrientation(JList.VERTICAL);
-		 * Framework.Data.curMatch.rolesPossibleList.setBackground(new
-		 * Color(32,32,32));
-		 * Framework.Data.curMatch.rolesPossibleList.setCellRenderer
-		 * (Framework.Window.CellRenderer.new RoleList());
-		 */
 		JScrollPane rolesPossibleScrollpane = new JScrollPane(
 				Framework.Data.curMatch.rolesPossibleList);
 		rolesPossibleScrollpane.setSize(115, 150);
@@ -1262,16 +1232,6 @@ public class Window extends Frame {
 
 		// Roles Setup
 		Framework.Telnet.write("-rolesetup list");
-		/*
-		 * Framework.Data.curMatch.roleSetupList.setSelectionMode(ListSelectionModel
-		 * .SINGLE_SELECTION);
-		 * Framework.Data.curMatch.roleSetupList.setLayoutOrientation
-		 * (JList.VERTICAL);
-		 * Framework.Data.curMatch.roleSetupList.setBackground(new
-		 * Color(32,32,32));
-		 * Framework.Data.curMatch.roleSetupList.setCellRenderer
-		 * (Framework.Window.CellRenderer.new RoleSetupList());
-		 */
 		JScrollPane roleSetupScrollpane = new JScrollPane(
 				Framework.Data.curMatch.roleSetupList);
 		roleSetupScrollpane.setSize(115, 150);
@@ -1296,6 +1256,63 @@ public class Window extends Frame {
 
 		mainPanel.add(rolesPossible);
 		mainPanel.add(roleSetup);
+
+		frame.setLayout(new BoxLayout(frame, BoxLayout.Y_AXIS));
+		frame.add(mainPanel);
+		frame.add(dialogDoneBut);
+		frame.setSize(frame.getPreferredSize());
+		frame.setAutoCenter();
+		return frame;
+	}
+
+	private JAutoPanel window_orderOfOps(final Integer layer) {
+		JAutoPanel frame = new JAutoPanel(this.desktop);
+		JScrollPane orderOfOpScrollpane = new JScrollPane(Framework.Data.curMatch.orderOfOpsList);
+		orderOfOpScrollpane.setSize(115, 150);
+
+		Framework.Telnet.write("-orderofop list");
+
+		JButton upBut = new JButton("Up");
+		JButton downBut = new JButton("Down");
+		upBut.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String select = (String) Framework.Data.curMatch.orderOfOpsList.getSelectedValue();
+				if(select != null){
+					Framework.Telnet.write("-orderofop "+select+" up");
+				}
+			}
+		});
+		downBut.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String select = (String) Framework.Data.curMatch.orderOfOpsList.getSelectedValue();
+				if(select != null){
+					Framework.Telnet.write("-orderofop "+select+" down");
+				}
+			}
+		});
+		JPanel upDownPanel = new JPanel();
+		upDownPanel.setLayout(new BoxLayout(upDownPanel, BoxLayout.X_AXIS));
+		upDownPanel.add(upBut);
+		upDownPanel.add(downBut);
+
+		JButton dialogDoneBut = new JButton("Done");// XXX need resize this button
+		dialogDoneBut.setAction(new AbstractAction("Done") {
+			private static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent evt) {
+				deleteIFrame(layer);// delets the poplayer
+			}
+		});
+
+		JPanel mainPanel = new JPanel();
+		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+
+		mainPanel.add(new Label("Order of Operations"));
+		mainPanel.add(orderOfOpScrollpane);
+		mainPanel.add(upDownPanel);
+
 
 		frame.setLayout(new BoxLayout(frame, BoxLayout.Y_AXIS));
 		frame.add(mainPanel);

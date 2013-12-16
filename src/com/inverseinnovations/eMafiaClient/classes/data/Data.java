@@ -2,14 +2,17 @@
    Copyright (C) 2012  Matthew 'Apocist' Davis */
 package com.inverseinnovations.eMafiaClient.classes.data;
 
+import java.awt.Color;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import javax.swing.*;
+
 import org.jdesktop.swingx.JXList;
 import com.inverseinnovations.eMafiaClient.*;
+import com.inverseinnovations.eMafiaClient.classes.Comparator_PlayerLobby;
 import com.inverseinnovations.eMafiaClient.classes.jobjects.*;
 
 
@@ -27,9 +30,23 @@ public class Data {
 	public DefaultListModel<List_Role> roleSearchListModel = new DefaultListModel<List_Role>();
 	public JXList roleSearchList = new JXList(roleSearchListModel);
 
+
 	public Data(Framework framework){
 		this.Framework = framework;
 		this.curMatch = new Match(Framework);
+
+		playerList.setComparator(new Comparator_PlayerLobby());
+		playerList.setAutoCreateRowSorter(true);
+		playerList.setSortOrder(SortOrder.ASCENDING);
+		playerList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		playerList.setLayoutOrientation(JXList.VERTICAL);
+		playerList.setBackground(new Color(32,32,32));
+		playerList.setCellRenderer(Framework.Window.CellRenderer.new PlayerList());
+
+		roleSearchList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		roleSearchList.setLayoutOrientation(JList.VERTICAL);
+		roleSearchList.setBackground(new Color(32,32,32));
+		roleSearchList.setCellRenderer(Framework.Window.CellRenderer.new RoleList());
 	}
 
 	public boolean serializeCharacter(CharacterSerialize chara){

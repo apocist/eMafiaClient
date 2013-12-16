@@ -170,7 +170,8 @@ public class Telnet {
 			switch (data.getCommand()) {
 			// -Connection-// 0 - 9
 			case "Connection":// connected/handshake
-				if(Integer.parseInt(data.getString()) >= Framework.Settings.CLIENT_BUILD){
+				if(Integer.parseInt(data.getString()) > Framework.Settings.CLIENT_BUILD){
+					System.out.println("Latest version is "+data.getString()+", currently at "+Framework.Settings.CLIENT_BUILD);
 					Framework.update();
 				}
 				break;
@@ -354,23 +355,6 @@ public class Telnet {
 						.parseInt(data.getString());
 				break;
 			case "Match Alive Player List Refresh":// refresh living player list
-				/*
-				 * if(detail != null){ //playerList.setListData(detail);//parse
-				 * detail later when needed(when data attached to names)
-				 * Framework.Data.curMatch.aliveListModel.clear(); for (String s
-				 * : detail) { if(s != null){
-				 * //playerListModel.addElement(s);//parse detail later when
-				 * needed(when data attached to names)
-				 * if(s.contains(CMDVARSUBDIVIDER
-				 * )){//fullDetail.contains(CMDVARDIVIDER) String[] sub =
-				 * s.split(CMDVARSUBDIVIDER);
-				 * Framework.Data.curMatch.aliveListModel.addElement(new
-				 * List_AlivePlayer(Framework,
-				 * Integer.parseInt(sub[0]),sub[1],sub[2])); }
-				 *
-				 * } } }
-				 */
-
 				if (data.getStringArrayArray() != null) {
 					Framework.Data.curMatch.aliveListModel.clear();
 					for (String[] s : data.getStringArrayArray()) {
@@ -505,6 +489,16 @@ public class Telnet {
 												.parseInt(s[0]), s[1], s[2],
 												s[3]));
 							}
+						}
+					}
+				}
+				break;
+			case "Order of Operations List"://action cat order
+				Framework.Data.curMatch.orderOfOpsListModel.clear();
+				if (data.getStringArrayArray() != null) {
+					for (String s : data.getStringArray()) {
+						if (s != null) {
+							Framework.Data.curMatch.orderOfOpsListModel.addElement(s);
 						}
 					}
 				}

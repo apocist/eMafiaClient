@@ -71,6 +71,7 @@ public class DataPacket {
 		case 802:r="Role Setup List";break;
 		case 803:r="Character ID Set";break;
 		case 804:r="Character Data Update";break;//TODO updates serialized character
+		case 805:r="Order of Operations List";break;
 		//-Popups/prompts-//
 		case 998:r="Role View Window";break;
 		case 999:r="Generic Window";break;

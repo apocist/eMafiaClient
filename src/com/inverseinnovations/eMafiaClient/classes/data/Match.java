@@ -35,6 +35,8 @@ public class Match extends JPanel{
     public JXList aliveList = new JXList(aliveListModel);
     public DefaultListModel<List_DeadPlayer> deadListModel = new DefaultListModel<List_DeadPlayer>();
     public JXList deadList = new JXList(deadListModel);
+    public DefaultListModel<String> orderOfOpsListModel = new DefaultListModel<String>();
+	public JXList orderOfOpsList = new JXList(orderOfOpsListModel);
 
     public String id;
     public String match_name;
@@ -141,6 +143,10 @@ public class Match extends JPanel{
 		roleSetupList.setLayoutOrientation(JList.VERTICAL);
 		roleSetupList.setBackground(new Color(32,32,32));
 		roleSetupList.setCellRenderer(Framework.Window.CellRenderer.new RoleSetupList());
+
+		orderOfOpsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		orderOfOpsList.setLayoutOrientation(JList.VERTICAL);
+		orderOfOpsList.setBackground(new Color(32,32,32));
 
     	this.updateMatchSetupSetting();
     }

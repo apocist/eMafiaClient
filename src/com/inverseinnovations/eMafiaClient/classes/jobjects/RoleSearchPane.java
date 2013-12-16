@@ -3,7 +3,6 @@
 package com.inverseinnovations.eMafiaClient.classes.jobjects;
 
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,11 +11,8 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.ListSelectionModel;
-
 import com.inverseinnovations.eMafiaClient.*;
 import com.inverseinnovations.eMafiaClient.classes.data.List_Role;
 
@@ -24,7 +20,6 @@ import com.inverseinnovations.eMafiaClient.classes.data.List_Role;
 /**
  * Allows this component directly place on JLayeredPane to be auto size according to
  * current frame size.
- * Allows either Fullscreen or Center
  * Allows additional function of detecting preferred size correctly
  */
 public class RoleSearchPane extends JPanel{
@@ -40,10 +35,10 @@ public class RoleSearchPane extends JPanel{
 		super();
 		this.Framework = framework;
 
-		Framework.Data.roleSearchList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);//TODO no need to select graveyard
+		/*Framework.Data.roleSearchList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		Framework.Data.roleSearchList.setLayoutOrientation(JList.VERTICAL);
 		Framework.Data.roleSearchList.setBackground(new Color(32,32,32));
-		Framework.Data.roleSearchList.setCellRenderer(Framework.Window.CellRenderer.new RoleList());
+		Framework.Data.roleSearchList.setCellRenderer(Framework.Window.CellRenderer.new RoleList());*/
 		JScrollPane roleSearchScrollpane = new JScrollPane(Framework.Data.roleSearchList);
 		roleSearchScrollpane.setSize(115, 150);
 
