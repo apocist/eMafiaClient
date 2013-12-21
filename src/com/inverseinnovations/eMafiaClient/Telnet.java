@@ -12,10 +12,6 @@ import com.inverseinnovations.eMafiaClient.classes.DataPacket;
 import com.inverseinnovations.eMafiaClient.classes.Utils;
 import com.inverseinnovations.eMafiaClient.classes.data.*;
 
-//import eMafiaClient.classes.jobjects.*;
-
-//import eMafiaFramework.Matchlisted;
-
 public class Telnet {
 	public final Framework Framework;
 	private Socket soc = null;
@@ -24,25 +20,6 @@ public class Telnet {
 	public boolean SERVERRUNNING = true;
 	public boolean MANUELDC = false;
 	public String var1, var2;
-
-	// (01)startoftext = 
-	// (03)endoftext = 
-	// (24)cancel = 
-	// (25)endofmedium = 
-	// (26)substitue = 
-	// (27)esc = 
-	// control will always be 3 chars in length 000 to 999
-	// command is made of (26)['control']'details'(25)
-	// extended command is made of
-	// (26)['control']'detail1''detail2''detail2''detail2'(25)
-	// full data command
-	// (26)['control']sub1sub1sub2sub2sub3sub3sub4sub4(25)
-	// (26) will state the beginning of the command
-	// (25) will state the end of the command
-	// (27) divides details
-	// (03) divides sub details
-	// example: [127]Now connecting makes popup box with text 'Now Connecting'
-	// details can be NULL
 
 	public Telnet(final Framework framework) {
 		this.Framework = framework;
@@ -188,8 +165,7 @@ public class Telnet {
 			case "Password2"://
 				write(var2);
 				break;
-			case "Login Prompt":// login prompt..Asking for username..handled
-								// differently later
+			case "Login Prompt":// login prompt..Asking for username..handled differently later
 				Framework.Window.createIFrame("login");
 				break;
 			case "Register Prompt":// register prompt
