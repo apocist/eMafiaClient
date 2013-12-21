@@ -1,5 +1,5 @@
 /* eMafiaClient - List_Match.java
-   Copyright (C) 2012  Matthew 'Apocist' Davis */
+Copyright (C) 2012  Matthew 'Apocist' Davis */
 package com.inverseinnovations.eMafiaClient.classes.data;
 
 
@@ -24,17 +24,17 @@ public class List_Match extends JPanel{
 	public int cur_players;
 	public int max_players;
 
-    public List_Match(final Framework Framework, String[] param){//int id, String name, int cur_players, int max_players){
-    	this.Framework = Framework;
-    	this.id = Integer.parseInt(param[0]);
-    	this.name = param[1];
-    	this.cur_players = Integer.parseInt(param[2]);
-    	this.max_players = Integer.parseInt(param[3]);
+	public List_Match(final Framework Framework, String[] param){//int id, String name, int cur_players, int max_players){
+		this.Framework = Framework;
+		this.id = Integer.parseInt(param[0]);
+		this.name = param[1];
+		this.cur_players = Integer.parseInt(param[2]);
+		this.max_players = Integer.parseInt(param[3]);
 
-    	//this.setSize(new Dimension(300,250));//size seems to make no difference
-    	this.setBackground(Color.white);
-    	//this.setSize(this.getParent().getSize());
-    	JLabel matchName = new JLabel(this.name);
+		//this.setSize(new Dimension(300,250));//size seems to make no difference
+		this.setBackground(Color.white);
+		//this.setSize(this.getParent().getSize());
+		JLabel matchName = new JLabel(this.name);
 		JLabel playerCount = new JLabel(this.cur_players + "/" + this.max_players + " players");
 		//JButtonData joinBut = new JButtonData();
 		JButton joinBut = new JButton();
@@ -43,11 +43,11 @@ public class List_Match extends JPanel{
 		joinBut.setText("Join");
 		joinBut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-	        	int matchID = id;//((JButtonData)evt.getSource()).int1;
-		       	Framework.Telnet.write("-match join "+matchID);
-	        	//System.out.print("------Button fired! Matchid "+matchID+"\n");
-	        }
-	    });
+				int matchID = id;//((JButtonData)evt.getSource()).int1;
+				   Framework.Telnet.write("-match join "+matchID);
+				//System.out.print("------Button fired! Matchid "+matchID+"\n");
+			}
+		});
 		matchName.setForeground(Color.red);
 		matchName.setFont(new Font("Default",1,18));
 		playerCount.setForeground(Color.pink);
@@ -63,8 +63,8 @@ public class List_Match extends JPanel{
 		this.add(joinBut,BorderLayout.LINE_END);
 		//this.add(matchPanel);
 
-    }
-    public String toString() {
-    	return name;
-    }
+	}
+	public String toString() {
+		return name;
+	}
 }

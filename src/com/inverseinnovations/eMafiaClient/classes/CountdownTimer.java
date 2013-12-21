@@ -1,5 +1,5 @@
 /* eMafiaClient - CountdownTimer.java
-   Copyright (C) 2012  Matthew 'Apocist' Davis */
+Copyright (C) 2012  Matthew 'Apocist' Davis */
 package com.inverseinnovations.eMafiaClient.classes;
 
 

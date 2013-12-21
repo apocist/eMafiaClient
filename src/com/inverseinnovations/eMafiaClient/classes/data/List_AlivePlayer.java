@@ -1,5 +1,5 @@
 /* eMafiaClient - List_AlivePlayer.java
-   Copyright (C) 2012  Matthew 'Apocist' Davis */
+Copyright (C) 2012  Matthew 'Apocist' Davis */
 package com.inverseinnovations.eMafiaClient.classes.data;
 
 import java.awt.BorderLayout;
@@ -25,35 +25,35 @@ public class List_AlivePlayer extends JPanel{
 	private static final long serialVersionUID = 1L;
 	public Framework Framework;
 	public int id;
-    public String name;
-    public String hexcolor;
-    public String nameDisplay;
-    //public String death;//only for graveyard
+	public String name;
+	public String hexcolor;
+	public String nameDisplay;
+	//public String death;//only for graveyard
 
-    private JLabel playerNum;
-    private JLabel playerName;
-    private JButton voteBut;
-    private JButton target1But;
-    private JButton target2But;
+	private JLabel playerNum;
+	private JLabel playerName;
+	private JButton voteBut;
+	private JButton target1But;
+	private JButton target2But;
 
-    public List_AlivePlayer(final Framework Framework, final int id, String name, String hexcolor){
-    	this.id = id;
-    	this.name = name;
-    	this.hexcolor = hexcolor;
-    	this.nameDisplay = hexcolor;
+	public List_AlivePlayer(final Framework Framework, final int id, String name, String hexcolor){
+		this.id = id;
+		this.name = name;
+		this.hexcolor = hexcolor;
+		this.nameDisplay = hexcolor;
 
-    	//this.setBackground(new Color(32,32,32));
-    	//XXX testing layout
-    	//setLayout(null);
-    	//setLayout(new PlayerLayout());
-    	setLayout(new FlowLayout(FlowLayout.LEADING, 2, 0));//remove padding
-    	setSize(200, 30);
-    	setPreferredSize(new Dimension(200, 30));
-    	setBorder(new EmptyBorder(0, 0, 0, 0) );
+		//this.setBackground(new Color(32,32,32));
+		//XXX testing layout
+		//setLayout(null);
+		//setLayout(new PlayerLayout());
+		setLayout(new FlowLayout(FlowLayout.LEADING, 2, 0));//remove padding
+		setSize(200, 30);
+		setPreferredSize(new Dimension(200, 30));
+		setBorder(new EmptyBorder(0, 0, 0, 0) );
 
-    	playerNum = new JLabel("<html><font size=\"1\" color=\"DDDDDD\">"+id+" </font></html>");
-    	//playerNum.setBorder(new EmptyBorder(0, 2, 0, 2) );
-    	playerNum.setPreferredSize(new Dimension(12, 24));playerNum.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);playerNum.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+		playerNum = new JLabel("<html><font size=\"1\" color=\"DDDDDD\">"+id+" </font></html>");
+		//playerNum.setBorder(new EmptyBorder(0, 2, 0, 2) );
+		playerNum.setPreferredSize(new Dimension(12, 24));playerNum.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);playerNum.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 		playerName = new JLabel("<html><font color=\""+hexcolor+"\">"+name+"</font></html>");//playerName.setOpaque(true);//.setBackground(new Color(32,32,32));
 		//playerName.setBorder(new EmptyBorder(0, 0, 0, 2) );
 		playerName.setPreferredSize(new Dimension(147, 30));playerName.setVerticalAlignment(javax.swing.SwingConstants.CENTER);
@@ -107,78 +107,78 @@ public class List_AlivePlayer extends JPanel{
 		target1But.setVisible(false);
 		//target2But.setBounds(185, 50, 7, 14);
 		target2But.setVisible(false);
-    }
+	}
 
-    public void dayVoting(int curPlayerNum, int[] targetsD1, int[] targetsD2){
-    	//this.removeAll();
-    	//this.add(playerNum,BorderLayout.WEST);
-    	//this.add(playerName,BorderLayout.CENTER);
-    	setAllNotVisible();
-    	playerName.setVisible(true);
-    	playerNum.setVisible(true);
-    	if(curPlayerNum != id){
-    		//this.add(voteBut,BorderLayout.EAST);
-    		voteBut.setVisible(true);
-    	}
-    	if(targetsD1[0] == -1 || ((targetsD1[0] == -3) && (curPlayerNum == id)) || ((targetsD1[0] == -2) && (curPlayerNum != id))){//if everyone or self
-    		//this.add(target1But,BorderLayout.EAST);
-    		target1But.setVisible(true);
-    	}
-    	if(targetsD2[0] == -1 || ((targetsD2[0] == -3) && (curPlayerNum == id)) || ((targetsD2[0] == -2) && (curPlayerNum != id))){//if everyone or self
-    		//this.add(target2But,BorderLayout.EAST);
-    		target2But.setVisible(true);
-    	}
-    }
-    public void nightNorm(int curPlayerNum, int[] targetsN1, int[] targetsN2){
-    	//this.removeAll();
-    	//this.add(playerNum,BorderLayout.WEST);
-    	//this.add(playerName,BorderLayout.CENTER);
-    	setAllNotVisible();
-    	playerName.setVisible(true);
-    	playerNum.setVisible(true);
-    	if(targetsN1[0] == -1 || ((targetsN1[0] == -3) && (curPlayerNum == id)) || ((targetsN1[0] == -2) && (curPlayerNum != id))){//if everyone or self
-    		//this.add(target1But,BorderLayout.EAST);
-    		target1But.setVisible(true);
-    	}
-    	if(targetsN2[0] == -1 || ((targetsN2[0] == -3) && (curPlayerNum == id)) || ((targetsN2[0] == -2) && (curPlayerNum != id))){//if everyone or self
-    		//this.add(target2But,BorderLayout.EAST);
-    		target2But.setVisible(true);
-    	}
-    }
-    public void dayNoVote(){
-    	//this.removeAll();
-    	//this.add(playerNum,BorderLayout.EAST);
-    	//this.add(playerName,BorderLayout.CENTER);
-    	setAllNotVisible();
-    	playerName.setVisible(true);
-    	playerNum.setVisible(true);
-    }
-    public void setVoteCount(String vote){
-    	if(!vote.equals("")){
-    		voteBut.setText("<html><font size=\"4\"><b>"+vote+"</b></font></html>");
-    	}
-    	else{
-    		voteBut.setText("");
-    	}
-    	//voteBut.setText(vote);
-    }
-    /** Makes all non-JPanels turn inviso*/
-    public void setAllNotVisible(){
-    	for(Component c : this.getComponents()){
-    		if(c.getClass().getSimpleName().equals("JPanel")){
-    			for(Component c2 : ((JPanel) c).getComponents()){
-    				c2.setVisible(false);
-    			}
-    		}
-    		else{
-    			c.setVisible(false);
-    		}
-    	}
-    }
-    public int getPlayerNum(){
-    	return id;
-    }
-    public String toString() {
-    	return name;
-    }
+	public void dayVoting(int curPlayerNum, int[] targetsD1, int[] targetsD2){
+		//this.removeAll();
+		//this.add(playerNum,BorderLayout.WEST);
+		//this.add(playerName,BorderLayout.CENTER);
+		setAllNotVisible();
+		playerName.setVisible(true);
+		playerNum.setVisible(true);
+		if(curPlayerNum != id){
+			//this.add(voteBut,BorderLayout.EAST);
+			voteBut.setVisible(true);
+		}
+		if(targetsD1[0] == -1 || ((targetsD1[0] == -3) && (curPlayerNum == id)) || ((targetsD1[0] == -2) && (curPlayerNum != id))){//if everyone or self
+			//this.add(target1But,BorderLayout.EAST);
+			target1But.setVisible(true);
+		}
+		if(targetsD2[0] == -1 || ((targetsD2[0] == -3) && (curPlayerNum == id)) || ((targetsD2[0] == -2) && (curPlayerNum != id))){//if everyone or self
+			//this.add(target2But,BorderLayout.EAST);
+			target2But.setVisible(true);
+		}
+	}
+	public void nightNorm(int curPlayerNum, int[] targetsN1, int[] targetsN2){
+		//this.removeAll();
+		//this.add(playerNum,BorderLayout.WEST);
+		//this.add(playerName,BorderLayout.CENTER);
+		setAllNotVisible();
+		playerName.setVisible(true);
+		playerNum.setVisible(true);
+		if(targetsN1[0] == -1 || ((targetsN1[0] == -3) && (curPlayerNum == id)) || ((targetsN1[0] == -2) && (curPlayerNum != id))){//if everyone or self
+			//this.add(target1But,BorderLayout.EAST);
+			target1But.setVisible(true);
+		}
+		if(targetsN2[0] == -1 || ((targetsN2[0] == -3) && (curPlayerNum == id)) || ((targetsN2[0] == -2) && (curPlayerNum != id))){//if everyone or self
+			//this.add(target2But,BorderLayout.EAST);
+			target2But.setVisible(true);
+		}
+	}
+	public void dayNoVote(){
+		//this.removeAll();
+		//this.add(playerNum,BorderLayout.EAST);
+		//this.add(playerName,BorderLayout.CENTER);
+		setAllNotVisible();
+		playerName.setVisible(true);
+		playerNum.setVisible(true);
+	}
+	public void setVoteCount(String vote){
+		if(!vote.equals("")){
+			voteBut.setText("<html><font size=\"4\"><b>"+vote+"</b></font></html>");
+		}
+		else{
+			voteBut.setText("");
+		}
+		//voteBut.setText(vote);
+	}
+	/** Makes all non-JPanels turn inviso*/
+	public void setAllNotVisible(){
+		for(Component c : this.getComponents()){
+			if(c.getClass().getSimpleName().equals("JPanel")){
+				for(Component c2 : ((JPanel) c).getComponents()){
+					c2.setVisible(false);
+				}
+			}
+			else{
+				c.setVisible(false);
+			}
+		}
+	}
+	public int getPlayerNum(){
+		return id;
+	}
+	public String toString() {
+		return name;
+	}
 }

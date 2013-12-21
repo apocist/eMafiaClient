@@ -1,5 +1,5 @@
 /* eMafiaClient - Utils.java
-   Copyright (C) 2012  Matthew 'Apocist' Davis */
+Copyright (C) 2012  Matthew 'Apocist' Davis */
 package com.inverseinnovations.eMafiaClient.classes;
 
 import java.awt.Component;
@@ -37,10 +37,10 @@ public class Utils {
 		Component[] comps = c.getComponents();
 		List<Component> compList = new ArrayList<Component>();
 		for (Component comp : comps) {
-		  compList.add(comp);
-		  if (comp instanceof Container) {
+		compList.add(comp);
+		if (comp instanceof Container) {
 			compList.addAll(getAllComponents((Container) comp));
-		  }
+		}
 		}
 		return compList;
 	}
@@ -51,8 +51,8 @@ public class Utils {
 				byte[] array = md.digest(md5.getBytes("UTF-8"));
 				StringBuffer sb = new StringBuffer();
 				for (int i = 0; i < array.length; ++i) {
-				  sb.append(Integer.toHexString((array[i] & 0xFF) | 0x100).substring(1,3));
-			   }
+				sb.append(Integer.toHexString((array[i] & 0xFF) | 0x100).substring(1,3));
+			}
 				return sb.toString();
 			}
 			catch (java.security.NoSuchAlgorithmException e) {}
@@ -114,12 +114,12 @@ public class Utils {
 	}
 
 	public static String getImageFormat(String imageName){
-	    String temp = imageName.toLowerCase();
-	    String theReturn = "jpg";
-	    if(temp.endsWith(".jpg"))theReturn = "jpg";
-	    else if(temp.endsWith(".jpeg"))theReturn = "jpg";
-	    else if(temp.endsWith(".png"))theReturn = "png";
-	    else if(temp.endsWith(".gif"))theReturn = "gif";
-	    return theReturn;
+		String temp = imageName.toLowerCase();
+		String theReturn = "jpg";
+		if(temp.endsWith(".jpg"))theReturn = "jpg";
+		else if(temp.endsWith(".jpeg"))theReturn = "jpg";
+		else if(temp.endsWith(".png"))theReturn = "png";
+		else if(temp.endsWith(".gif"))theReturn = "gif";
+		return theReturn;
 	}
 }

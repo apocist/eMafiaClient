@@ -1,5 +1,5 @@
 /* eMafiaClient - Framework.java
-   Copyright (C) 2012  Matthew 'Apocist' Davis */
+Copyright (C) 2012  Matthew 'Apocist' Davis */
 package com.inverseinnovations.eMafiaClient;
 
 import java.io.File;
@@ -33,14 +33,13 @@ public class Framework {
 	}
 
 	public void connect() {
-		//Telnet.connect("127.0.0.1", "3689");
-		Telnet.connect("www.inverseinnovations.com", "3689");
+		Telnet.connect(Settings.SERVER_URL, Settings.SERVER_PORT);
 	}
 
 	public void checkUpdater(){
-		Path source = Paths.get("/_updater.jar");
+		Path source = Paths.get("_updater.jar");
 		if(source.toFile().exists()){
-			Path newDir = Paths.get("/updater.jar");
+			Path newDir = Paths.get("updater.jar");
 			try {
 				Files.move(source, newDir, REPLACE_EXISTING);
 			} catch (IOException e) {
@@ -49,21 +48,21 @@ public class Framework {
 		}
 	}
 
- 	public void update(){
+	public void update(){
 		Telnet.disconnect();
 		String[] run = {"java","-jar","update.jar"};
 		ProcessBuilder pb = new ProcessBuilder(run);
 		pb.directory(new File(System.getProperty("user.dir")));
 
-        try {
-        	//Runtime.getRuntime().exec(run);
-        	pb.start();
-        	System.out.println("updater.jar from "+pb.directory().getPath());
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        System.exit(0);
-    }
+		try {
+			//Runtime.getRuntime().exec(run);
+			pb.start();
+			System.out.println("updater.jar from "+pb.directory().getPath());
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		System.exit(0);
+	}
 
 	public static void main(String[] args) {
 		Framework gameClient = new Framework();

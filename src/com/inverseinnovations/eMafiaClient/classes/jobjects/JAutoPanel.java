@@ -1,5 +1,5 @@
 /* eMafiaClient - JAutoPanel.java
-   Copyright (C) 2012  Matthew 'Apocist' Davis */
+Copyright (C) 2012  Matthew 'Apocist' Davis */
 package com.inverseinnovations.eMafiaClient.classes.jobjects;
 import java.awt.Dimension;
 
@@ -58,12 +58,12 @@ public class JAutoPanel extends JPanel{
 	}
 
 	public Dimension getPreferredSize(){
-	  Dimension pSize = super.getPreferredSize();
-	  Dimension mSize = getMinimumSize();
-	  int wid, ht;
+	Dimension pSize = super.getPreferredSize();
+	Dimension mSize = getMinimumSize();
+	int wid, ht;
 
-	  wid = pSize.width < mSize.width  ? mSize.width : pSize.width;
-	  ht = pSize.height < mSize.height ? mSize.height: pSize.height;
-	  return new Dimension(wid, ht);
+	wid = pSize.width < mSize.width  ? mSize.width : pSize.width;
+	ht = pSize.height < mSize.height ? mSize.height: pSize.height;
+	return new Dimension(wid, ht);
 	}
 }

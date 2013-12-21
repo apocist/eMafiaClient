@@ -1,5 +1,5 @@
 /* eMafiaClient - ColorPane.java
-   Copyright (C) 2012  Matthew 'Apocist' Davis */
+Copyright (C) 2012  Matthew 'Apocist' Davis */
 package com.inverseinnovations.eMafiaClient.classes.jobjects;
 
 import java.awt.Color;

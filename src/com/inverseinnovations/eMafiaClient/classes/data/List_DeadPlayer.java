@@ -1,5 +1,5 @@
 /* eMafiaClient - List_DeadPlayer.java
-   Copyright (C) 2012  Matthew 'Apocist' Davis */
+Copyright (C) 2012  Matthew 'Apocist' Davis */
 package com.inverseinnovations.eMafiaClient.classes.data;
 
 import javax.swing.JLabel;
@@ -12,20 +12,20 @@ public class List_DeadPlayer extends JPanel{
 	private static final long serialVersionUID = 1L;
 	public Framework Framework;
 	public int id;
-    public String name;
-    public String hexcolor;
-    public String nameDisplay;
-    public String death;//only for graveyard TODO need to remove and fix graveyard
+	public String name;
+	public String hexcolor;
+	public String nameDisplay;
+	public String death;//only for graveyard TODO need to remove and fix graveyard
 
-    private JLabel playerName;
+	private JLabel playerName;
 
-    public List_DeadPlayer(final Framework Framework, final int id, String name, String hexcolor){
-    	this.id = id;
-    	this.name = name;
-    	this.hexcolor = hexcolor;
-    	this.nameDisplay = hexcolor;
+	public List_DeadPlayer(final Framework Framework, final int id, String name, String hexcolor){
+		this.id = id;
+		this.name = name;
+		this.hexcolor = hexcolor;
+		this.nameDisplay = hexcolor;
 
-    	setSize(200, 30);
+		setSize(200, 30);
 
 		playerName = new JLabel("<html><font color=\""+hexcolor+"\">"+name+"</font></html>");//playerName.setBackground(new Color(32,32,32));
 
@@ -33,9 +33,9 @@ public class List_DeadPlayer extends JPanel{
 
 
 		playerName.setVisible(true);
-    }
+	}
 
-    public String toString() {
-    	return name;
-    }
+	public String toString() {
+		return name;
+	}
 }

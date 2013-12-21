@@ -1,5 +1,5 @@
 /* eMafiaClient - RoleSearchPane.java
-   Copyright (C) 2012  Matthew 'Apocist' Davis */
+Copyright (C) 2012  Matthew 'Apocist' Davis */
 package com.inverseinnovations.eMafiaClient.classes.jobjects;
 
 
@@ -54,8 +54,8 @@ public class RoleSearchPane extends JPanel{
 					performSearch();
 				}
 			}
-        };
-        ActionListener pageButListener = new ActionListener() {//add actionlistner to listen for change
+		};
+		ActionListener pageButListener = new ActionListener() {//add actionlistner to listen for change
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				//@SuppressWarnings("unused")
@@ -69,11 +69,11 @@ public class RoleSearchPane extends JPanel{
 					}
 				}
 			}
-        };
+		};
 		String[] affStrings = { "ANY", "TOWN", "MAFIA", "NEUTRAL"};
 		JComboBox<String> affList = new JComboBox<String>(affStrings);affList.setName("aff");
 		affList.setSelectedIndex(0);
-        affList.addActionListener(affcatListListener);
+		affList.addActionListener(affcatListListener);
 
 		String[] catStrings = { "ANY", "CORE", "INVESTIGATIVE", "PROTECTIVE", "KILLING"};
 		JComboBox<String> catList = new JComboBox<String>(catStrings);catList.setName("cat");
@@ -97,8 +97,8 @@ public class RoleSearchPane extends JPanel{
 					Framework.Telnet.write("-roleview "+getSelectedRole());
 				}
 			}
-        };
-        viewBut.addActionListener(viewButListener);
+		};
+		viewBut.addActionListener(viewButListener);
 		JPanel pagePanel = new JPanel();
 		pagePanel.setLayout(new BoxLayout(pagePanel, BoxLayout.X_AXIS));
 		pagePanel.add(viewBut);
@@ -126,12 +126,12 @@ public class RoleSearchPane extends JPanel{
 	}
 
 	public Dimension getPreferredSize(){
-	  Dimension pSize = super.getPreferredSize();
-	  Dimension mSize = getMinimumSize();
-	  int wid, ht;
+	Dimension pSize = super.getPreferredSize();
+	Dimension mSize = getMinimumSize();
+	int wid, ht;
 
-	  wid = pSize.width < mSize.width  ? mSize.width : pSize.width;
-	  ht = pSize.height < mSize.height ? mSize.height: pSize.height;
-	  return new Dimension(wid, ht);
+	wid = pSize.width < mSize.width  ? mSize.width : pSize.width;
+	ht = pSize.height < mSize.height ? mSize.height: pSize.height;
+	return new Dimension(wid, ht);
 	}
 }

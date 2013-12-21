@@ -1,5 +1,5 @@
 /* eMafiaClient - Telnet.java
-   Copyright (C) 2012  Matthew 'Apocist' Davis */
+Copyright (C) 2012  Matthew 'Apocist' Davis */
 package com.inverseinnovations.eMafiaClient;
 
 import java.io.DataInputStream;
@@ -22,6 +22,7 @@ public class Telnet {
 	private DataInputStream in;
 	private PrintWriter out;
 	public boolean SERVERRUNNING = true;
+	public boolean MANUELDC = false;
 	public String var1, var2;
 
 	// (01)startoftext = 
@@ -56,8 +57,7 @@ public class Telnet {
 			} catch (IOException e) {
 				System.out.println("Can't connect to eMafia\n");
 				SERVERRUNNING = false;
-				Framework.Window.createIFrame("popup", new String[] {
-						"eMafia Server is OFFLINE", "exit" });
+				Framework.Window.createIFrame("popup", new String[] {"eMafia Server is OFFLINE", "exit" });
 			}
 			// in = new BufferedReader(new
 			// InputStreamReader(soc.getInputStream()));
@@ -129,9 +129,9 @@ public class Telnet {
 		} catch (SocketException e) {
 			System.out.println("Connection Socket Error\n");
 			SERVERRUNNING = false;
-			Framework.Window.createIFrame("popup", new String[] {
-					"<html><b>You were Disconnected from eMafia</b></html>",
-					"exit" });
+			if(!MANUELDC){
+				Framework.Window.createIFrame("popup", new String[] {"<html><b>You were Disconnected from eMafia</b></html>","exit" });
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -171,8 +171,10 @@ public class Telnet {
 			// -Connection-// 0 - 9
 			case "Connection":// connected/handshake
 				if(Integer.parseInt(data.getString()) > Framework.Settings.CLIENT_BUILD){
-					System.out.println("Latest version is "+data.getString()+", currently at "+Framework.Settings.CLIENT_BUILD);
-					Framework.update();
+					//System.out.println("Latest version is "+data.getString()+", currently at "+Framework.Settings.CLIENT_BUILD);
+					MANUELDC = true;
+					disconnect();
+					Framework.Window.createIFrame("popup", new String[] {"<center>Latest version is Build "+data.getString()+", currently at Build "+Framework.Settings.CLIENT_BUILD+"<br>Update required!</center>", "update"});
 				}
 				break;
 			case "Password":// Asking for password..if FINAL, remove from client
@@ -495,13 +497,14 @@ public class Telnet {
 				break;
 			case "Order of Operations List"://action cat order
 				Framework.Data.curMatch.orderOfOpsListModel.clear();
-				if (data.getStringArrayArray() != null) {
+				if (data.getStringArray() != null) {
 					for (String s : data.getStringArray()) {
 						if (s != null) {
 							Framework.Data.curMatch.orderOfOpsListModel.addElement(s);
 						}
 					}
 				}
+				//Framework.Data.curMatch.orderOfOpsList.validate();
 				break;
 			case "Character ID Set":// set Character ID
 				if (Utils.isInteger(data.getString())) {

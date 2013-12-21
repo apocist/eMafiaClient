@@ -1,5 +1,5 @@
 /* eMafiaClient - Window.java
-   Copyright (C) 2012  Matthew 'Apocist' Davis */
+Copyright (C) 2012  Matthew 'Apocist' Davis */
 package com.inverseinnovations.eMafiaClient;
 
 //TODO need to MD5 the registration/verify password
@@ -996,7 +996,7 @@ public class Window extends Frame {
 			}
 		});
 		possibleBut.setPreferredSize(new Dimension(15, 10));
-		JButton orderofOpsBut = new JButton("<html><font size=\"1\">Roles Possible</font></html>");
+		JButton orderofOpsBut = new JButton("<html><font size=\"1\">Order of Operations</font></html>");
 		orderofOpsBut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				deleteIFrame(layer);// delets self
@@ -1354,8 +1354,7 @@ public class Window extends Frame {
 		return frame;
 	}
 
-	private JAutoPanel window_popup(String msg, String msgType,
-			final Integer layer) {
+	private JAutoPanel window_popup(String msg, String msgType, final Integer layer) {
 		JAutoPanel frame = new JAutoPanel(this.desktop);
 
 		// JLabel dialogText = new JLabel(msg);
@@ -1397,24 +1396,38 @@ public class Window extends Frame {
 
 			public void actionPerformed(ActionEvent evt) {
 				deleteIFrame(layer);// delets the poplayer
-				Framework.Telnet.write("JAVA");// redo login
+				//Framework.Telnet.write("JAVA");// redo login
 			}
 		};
 		Action exitAction = new AbstractAction("OK") {
 			private static final long serialVersionUID = 1L;
 
 			public void actionPerformed(ActionEvent evt) {
+				Framework.Telnet.disconnect();
 				System.exit(0);
 			}
 		};
+		Action updateAction = new AbstractAction("Update") {
+			private static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent evt) {
+				Framework.update();
+			}
+		};
 		JButton dialogOKBut = new JButton("OK");// XXX need resize this button
-		if (msgType.equals("relogin")) {
+		if (msgType.equals("relogin")){
 			dialogOKBut.setAction(reloginAction);
-		} else if (msgType.equals("ok")) {
+		}
+		else if (msgType.equals("ok")){
 			dialogOKBut.setAction(okAction);
-		} else if (msgType.equals("exit")) {
+		}
+		else if (msgType.equals("exit")){
 			dialogOKBut.setAction(exitAction);
-		} else {
+		}
+		else if (msgType.equals("update")){
+			dialogOKBut.setAction(updateAction);
+		}
+		else{
 			dialogOKBut.setAction(okAction);
 			dialogOKBut.setText("Bug in making this button!");
 		}

@@ -1,5 +1,5 @@
 /* eMafiaClientUpdater - eMafiaClientUpdater.java
-   Copyright (C) 2012  Matthew 'Apocist' Davis */
+Copyright (C) 2012  Matthew 'Apocist' Davis */
 package com.inverseinnovations.eMafiaClientUpdater;
 
 import java.awt.BorderLayout;
@@ -18,6 +18,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.net.MalformedURLException;
+import java.net.Socket;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -33,7 +34,8 @@ import javax.swing.JTextArea;
 
 public class eMafiaClientUpdater extends JFrame{
 	private static final long serialVersionUID = 1L;
-	private String updateURL = "http://inverseinnovations.com/eMafia/";
+	private String updateURL1 = "dl.inverseinnovations.com";
+	private String stableURL = "inverseinnovations.com";
 	private String rootFolder = System.getProperty("user.dir");
 	private String updateFolder = rootFolder+"/_update";
 	private int updateVersion;
@@ -116,12 +118,12 @@ public class eMafiaClientUpdater extends JFrame{
 		doneBut.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				String[] run = {"java","-jar","/eMafia.jar"};
-		        try {
-		            Runtime.getRuntime().exec(run);
-		        } catch (Exception ex) {
-		            ex.printStackTrace();
-		        }
-		        System.exit(0);
+				try {
+					Runtime.getRuntime().exec(run);
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+				System.exit(0);
 			}
 		});
 		donePanel.add(doneBut);
@@ -139,8 +141,21 @@ public class eMafiaClientUpdater extends JFrame{
 	}
 	private boolean grabUpdateProp(){
 		boolean theReturn = false;
+		Socket socket = null;
+		try {
+			socket = new Socket(updateURL1, 80);
+			stableURL = updateURL1;
+		}
+		catch(IOException e) {System.out.println("error");}
+		finally {
+			if (socket != null){
+				try {
+					socket.close();
+				}
+				catch(IOException e) {System.out.println("error2");}
+			}
+		}
 		try{
-
 			if(this.getClass().getResourceAsStream("/settings.ini") != null){
 				Properties prop = new Properties();
 				prop.load(this.getClass().getResourceAsStream("/settings.ini"));
@@ -153,7 +168,7 @@ public class eMafiaClientUpdater extends JFrame{
 			}
 
 			try {
-				URL url = new URL(updateURL+"update.ini");
+				URL url = new URL("http://"+stableURL+"/eMafia/"+"update.ini");
 				URLConnection conn = url.openConnection();
 				InputStream is = conn.getInputStream();
 
@@ -167,6 +182,7 @@ public class eMafiaClientUpdater extends JFrame{
 				}
 
 				is.close();
+				output.append("\n"+"Connected to "+stableURL);
 				output.append("\n"+"Downloaded update list...");
 				theReturn = true;
 			}
@@ -262,7 +278,7 @@ public class eMafiaClientUpdater extends JFrame{
 	private void downloadFile(String link) throws MalformedURLException, IOException{
 		boolean error2 = false;
 		progressBar.setValue(0);
-		URL url = new URL(updateURL+link);
+		URL url = new URL("http://"+stableURL+"/eMafia/"+link);
 		URLConnection conn = url.openConnection();
 		InputStream is = conn.getInputStream();
 
@@ -270,6 +286,7 @@ public class eMafiaClientUpdater extends JFrame{
 		output.append("\n"+"Downloding file "+link+"("+lenghtOfFile /1024+" KBs)...");
 		try{
 			int count;
+			if(link.equals("updater.jar")){link = "_"+link;}//rename updater file
 			File file = new File(updateFolder+"/"+link);
 			file.getParentFile().mkdirs();
 			BufferedOutputStream fOut = new BufferedOutputStream(new FileOutputStream(file));
@@ -306,21 +323,21 @@ public class eMafiaClientUpdater extends JFrame{
 	}
 	public void copy(String srFile, String dtFile) throws FileNotFoundException, IOException{
 
-		  File f1 = new File(srFile);
-		  File f2 = new File(dtFile);
+		File f1 = new File(srFile);
+		File f2 = new File(dtFile);
 
-		  InputStream in = new FileInputStream(f1);
+		InputStream in = new FileInputStream(f1);
 
-		  OutputStream out = new FileOutputStream(f2);
+		OutputStream out = new FileOutputStream(f2);
 
-		  byte[] buf = new byte[1024];
-		  int len;
-		  while ((len = in.read(buf)) > 0){
+		byte[] buf = new byte[1024];
+		int len;
+		while ((len = in.read(buf)) > 0){
 			out.write(buf, 0, len);
-		  }
-		  in.close();
-		  out.close();
-	  }
+		}
+		in.close();
+		out.close();
+	}
 	private void cleanup(){
 		output.append("\n"+"Performing clean up...");
 		try {
@@ -331,25 +348,25 @@ public class eMafiaClientUpdater extends JFrame{
 		}
 	}
 	public static void delete(File file) throws IOException{
-	    	if(file.isDirectory()){
-	    		if(file.list().length==0){
-	    		   file.delete();
-	    		}
-	    		else{
-	        	   String files[] = file.list();
-	        	   for (String temp : files) {
-	        	     File fileDelete = new File(file, temp);
-	        	     delete(fileDelete);
-	        	   }
-	        	   if(file.list().length==0){
-	           	     file.delete();
-	        	   }
-	    		}
-	    	}
-	    	else{
-	    		file.delete();
-	    	}
-	    }
+			if(file.isDirectory()){
+				if(file.list().length==0){
+				file.delete();
+				}
+				else{
+				String files[] = file.list();
+				for (String temp : files) {
+					File fileDelete = new File(file, temp);
+					delete(fileDelete);
+				}
+				if(file.list().length==0){
+						file.delete();
+				}
+				}
+			}
+			else{
+				file.delete();
+			}
+		}
 
 	public static boolean isInteger(String s){
 		if(s != null && s != "")return isInteger(s,10);
