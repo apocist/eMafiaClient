@@ -946,7 +946,7 @@ public class Window extends Frame {
 			private static final long serialVersionUID = 1L;
 
 			public void actionPerformed(ActionEvent evt) {
-				String name = null;
+				String name = "";
 				Component[] theList = ((Component) evt.getSource()).getParent()
 						.getComponents();
 				for (Component comp : theList) {

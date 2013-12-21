@@ -64,10 +64,15 @@ public class Data {
 		catch (IOException e) {e.printStackTrace();}
 		finally{
 			try {
+			    	//pretty hacky but it wasn't going to work anyway if either is null
+			    	if (outObj == null || fileOut == null) {
+			    	    throw new NullPointerException();
+			    	}
 				outObj.close();
 				fileOut.close();
 			}
 			catch (IOException e){e.printStackTrace();}
+			catch (NullPointerException e) {e.printStackTrace();}
 		}
 		return success;
 	}
@@ -85,10 +90,15 @@ public class Data {
 		catch (Exception e) {e.printStackTrace();}
 		finally{
 			try {
+			    //pretty hacky but it wasn't going to work anyway if either is null
+			    	if (inputObj == null || fileInput == null) {
+			    	    throw new NullPointerException();
+			    	}
 				inputObj.close();
 				fileInput.close();
 			}
 			catch (IOException e){e.printStackTrace();}
+			catch (NullPointerException e) {e.printStackTrace();}
 		}
 		return chara;
 	}

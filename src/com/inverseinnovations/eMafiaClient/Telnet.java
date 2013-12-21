@@ -254,10 +254,10 @@ public class Telnet {
 					String name = data.getStringArray()[1];
 					for (int loop = 0; loop < Framework.Data.playerListModel
 							.getSize(); loop++) {
-						if (eid == ((List_Character) Framework.Data.playerListModel
-								.get(loop)).id) {
-							if (name.equals(((List_Character) Framework.Data.playerListModel
-									.get(loop)).name)) {
+						if (eid == Framework.Data.playerListModel
+								.get(loop).id) {
+							if (name.equals(Framework.Data.playerListModel
+									.get(loop).name)) {
 								Framework.Data.playerListModel.remove(loop);
 								break;
 							}
