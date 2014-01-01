@@ -93,11 +93,11 @@ public class Telnet {
 													// too big, this wont be
 													// reached then theres error
 					doCommand(new DataPacket(control, data));
-					if(size > 0){
+					if(size > 0){//just for debugging purposes
 						if(control < 1000){
 							System.out.println("[" + control + "] "+ new String(data, "ISO-8859-1"));
 						}
-						else{System.out.println("[" + control + "] <Object>");}
+						else{System.out.println("[" + control + "] <Object> "+size+" bytes");}
 					}
 					else{System.out.println("[" + control + "]");}
 				}
@@ -511,7 +511,9 @@ public class Telnet {
 				break;
 			case "Role Update":// roleView changes
 				if(data.getObject() instanceof RoleData){
-					Framework.Data.roleView.updateData((RoleData)data.getObject());
+					RoleData role = (RoleData)data.getObject();
+					Framework.Data.serializeObject("/cache/role/", ""+role.id, role);
+					Framework.Data.roleView.updateData(role);
 					Framework.Window.autoUpdateJAutoPanels();
 				}
 				//TODO serialize object as well

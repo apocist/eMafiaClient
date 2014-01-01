@@ -13,6 +13,7 @@ import java.awt.Frame;
 import java.awt.Label;
 import java.awt.Point;
 import java.awt.event.*;
+import java.io.File;
 import java.net.URI;
 
 import javax.swing.*;
@@ -23,6 +24,7 @@ import javax.swing.event.HyperlinkListener;
 import com.inverseinnovations.eMafiaClient.classes.*;
 import com.inverseinnovations.eMafiaClient.classes.data.List_Role;
 import com.inverseinnovations.eMafiaClient.classes.jobjects.*;
+import com.inverseinnovations.sharedObjects.RoleData;
 
 public class Window extends Frame {
 	private static final long serialVersionUID = 1L;
@@ -1325,7 +1327,7 @@ public class Window extends Frame {
 		JAutoPanel frame = new JAutoPanel(this.desktop);
 
 		Framework.Data.roleView = new RoleDataDisplay(false);
-		JButton dialogDoneBut = new JButton("Done");// XXX need resize this button
+		JButton dialogDoneBut = new JButton("Done");
 		dialogDoneBut.setAction(new AbstractAction("Done") {
 			private static final long serialVersionUID = 1L;
 
@@ -1338,8 +1340,16 @@ public class Window extends Frame {
 		mainP.add(Framework.Data.roleView);
 		mainP.add(dialogDoneBut);
 		frame.add(mainP);
+		//check for cache
 		if(Utils.isInteger(roleId)){
-			Framework.Telnet.write("-roleview "+roleId);
+			if(new File(System.getProperty("user.dir") + "/cache/role/"+roleId).exists()){
+				RoleData role = (RoleData) Framework.Data.unserializeObject("/cache/role/", roleId);
+				Framework.Data.roleView.updateData(role);
+				Framework.Telnet.write("-roleview "+roleId+" "+role.version);
+			}
+			else{
+				Framework.Telnet.write("-roleview "+roleId);
+			}
 		}
 		frame.setSize(frame.getPreferredSize());
 		frame.setPack(true);

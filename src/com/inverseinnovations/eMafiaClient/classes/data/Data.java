@@ -3,6 +3,7 @@ Copyright (C) 2012  Matthew 'Apocist' Davis */
 package com.inverseinnovations.eMafiaClient.classes.data;
 
 import java.awt.Color;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -55,6 +56,8 @@ public class Data {
 		FileOutputStream fileOut = null;
 		ObjectOutputStream outObj = null;
 		try {
+			File dir = new File(System.getProperty("user.dir") + location);
+			dir.mkdirs();//Errors if the dir doesn't exist
 			fileOut = new FileOutputStream(System.getProperty("user.dir") + location +fileName);
 			outObj = new ObjectOutputStream(fileOut);
 			outObj.writeObject(object);
@@ -90,9 +93,9 @@ public class Data {
 		finally{
 			try {
 			    //pretty hacky but it wasn't going to work anyway if either is null
-			    	if (inputObj == null || fileInput == null) {
+			    	/*if (inputObj == null || fileInput == null) {
 			    	    throw new NullPointerException();
-			    	}
+			    	}*/
 				inputObj.close();
 				fileInput.close();
 			}
