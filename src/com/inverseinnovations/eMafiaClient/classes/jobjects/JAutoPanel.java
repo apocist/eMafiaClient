@@ -18,6 +18,7 @@ public class JAutoPanel extends JPanel{
 	private JLayeredPane pane;
 	private boolean fullscreen = false;
 	private boolean center = false;
+	private boolean pack = false;
 
 	public JAutoPanel(JLayeredPane pane){
 		super();
@@ -29,6 +30,7 @@ public class JAutoPanel extends JPanel{
 			autoUpdateFullscreen();
 		}
 		else if(center){//if should center in the Layer
+			if(pack){this.setSize(this.getPreferredSize());}
 			autoUpdateCenter();
 		}
 		validate();
@@ -55,6 +57,10 @@ public class JAutoPanel extends JPanel{
 		this.fullscreen = true;
 		this.center = false;
 		autoUpdateFullscreen();
+	}
+
+	public void setPack(boolean pack){
+		this.pack = pack;
 	}
 
 	public Dimension getPreferredSize(){

@@ -225,7 +225,7 @@ public class Window extends Frame {
 			frame = window_orderOfOps(layer);
 			break;
 		case "roleView":
-			frame = window_roleView(parameters, layer);
+			frame = window_roleView(layer, parameters[0]);
 			break;
 		case "popup":
 			frame = window_popup(parameters[0], parameters[1], layer);
@@ -1072,8 +1072,7 @@ public class Window extends Frame {
 			}
 		});
 		JPanel addRemovePanel = new JPanel();
-		addRemovePanel
-				.setLayout(new BoxLayout(addRemovePanel, BoxLayout.Y_AXIS));
+		addRemovePanel.setLayout(new BoxLayout(addRemovePanel, BoxLayout.Y_AXIS));
 		addRemovePanel.add(addBut);
 		addRemovePanel.add(removeBut);
 
@@ -1322,34 +1321,28 @@ public class Window extends Frame {
 		return frame;
 	}
 
-	private JAutoPanel window_roleView(String[] data, final Integer layer) {
+	private JAutoPanel window_roleView(final Integer layer, String roleId) {
 		JAutoPanel frame = new JAutoPanel(this.desktop);
 
-		JLabel nameText = new JLabel("<Role Name Not Set>");
-		JLabel idText = new JLabel("<ID Not Set>");
-		if (data[0] != null) {
-			nameText.setText(data[0]);
-		}
-		if (data[1] != null) {
-			idText.setText(data[1]);
-		}
-
-		JButton dialogOKBut = new JButton("OK");// XXX need resize this button
-		dialogOKBut.setAction(new AbstractAction("OK") {
+		Framework.Data.roleView = new RoleDataDisplay(false);
+		JButton dialogDoneBut = new JButton("Done");// XXX need resize this button
+		dialogDoneBut.setAction(new AbstractAction("Done") {
 			private static final long serialVersionUID = 1L;
 
 			public void actionPerformed(ActionEvent evt) {
 				deleteIFrame(layer);// delets the poplayer
 			}
 		});
-
-		JPanel panel = new JPanel(new BorderLayout());
-		panel.add(nameText, BorderLayout.NORTH);
-		panel.add(idText, BorderLayout.CENTER);
-		panel.add(dialogOKBut, BorderLayout.PAGE_END);
-
-		frame.add(panel);
+		JPanel mainP = new JPanel();
+		mainP.setLayout(new BoxLayout(mainP, BoxLayout.Y_AXIS));
+		mainP.add(Framework.Data.roleView);
+		mainP.add(dialogDoneBut);
+		frame.add(mainP);
+		if(Utils.isInteger(roleId)){
+			Framework.Telnet.write("-roleview "+roleId);
+		}
 		frame.setSize(frame.getPreferredSize());
+		frame.setPack(true);
 		frame.setAutoCenter();
 		return frame;
 	}

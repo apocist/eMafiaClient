@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.SocketException;
 
+import com.inverseinnovations.sharedObjects.RoleData;
 import com.inverseinnovations.eMafiaClient.classes.DataPacket;
 import com.inverseinnovations.eMafiaClient.classes.Utils;
 import com.inverseinnovations.eMafiaClient.classes.data.*;
@@ -92,13 +93,15 @@ public class Telnet {
 													// too big, this wont be
 													// reached then theres error
 					doCommand(new DataPacket(control, data));
-					if (size > 0) {
-						System.out.println("[" + control + "] "
-								+ new String(data, "ISO-8859-1"));
-					} else {
-						System.out.println("[" + control + "]");
+					if(size > 0){
+						if(control < 1000){
+							System.out.println("[" + control + "] "+ new String(data, "ISO-8859-1"));
+						}
+						else{System.out.println("[" + control + "] <Object>");}
 					}
-				} else {
+					else{System.out.println("[" + control + "]");}
+				}
+				else {
 					System.out.println("****ERROR**NO COMMAND ENDER****");
 				}
 				return;
@@ -490,29 +493,31 @@ public class Telnet {
 				break;
 			case "Character Data Update":// TODO updates serialized character
 				if (data.getStringArray() != null) {
-					Framework.Data
+					/*Framework.Data
 							.serializeCharacter(new CharacterSerialize(Integer
 									.parseInt(data.getStringArray()[0]), data
 									.getStringArray()[1],
 									data.getStringArray()[2], data
 											.getStringArray()[3]));
 					Framework.Data.unserializeCharacter(Integer.parseInt(data
-							.getStringArray()[0]));
+							.getStringArray()[0]));*/
 				}
 				break;
 			// -Popups/prompts-//
-			case "Role View Window":// roleView popup
-				Framework.Window
-						.createIFrame("roleView", data.getStringArray());
-				break;
+
 			case "Generic Window":// generic popup
 				Framework.Window.createIFrame("popup",
 						new String[] { data.getString(1), "ok" });
 				break;
-
+			case "Role Update":// roleView changes
+				if(data.getObject() instanceof RoleData){
+					Framework.Data.roleView.updateData((RoleData)data.getObject());
+					Framework.Window.autoUpdateJAutoPanels();
+				}
+				//TODO serialize object as well
+				break;
 			default:
-				System.out.print(" ||| ***Command Control " + data.getControl()
-						+ ":" + data.getCommand() + " non-Existant***");
+				System.out.println(" ||| ***Command Control " + data.getControl()+ ":" + data.getCommand() + " non-Existant***");
 				break;
 			}
 		}

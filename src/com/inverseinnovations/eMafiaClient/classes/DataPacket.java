@@ -2,6 +2,10 @@
 Copyright (C) 2012  Matthew 'Apocist' Davis */
 package com.inverseinnovations.eMafiaClient.classes;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
 import java.io.UnsupportedEncodingException;
 
 public class DataPacket {
@@ -10,6 +14,7 @@ public class DataPacket {
 	private int control;
 	private byte[] data;
 	private Object string;
+	private Object object;
 
 	public DataPacket(int control, byte[] data){
 		this.control = control;
@@ -20,6 +25,9 @@ public class DataPacket {
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
+		}
+		else{
+			this.object = byteToObject(data);
 		}
 	}
 
@@ -73,8 +81,8 @@ public class DataPacket {
 		case 804:r="Character Data Update";break;//TODO updates serialized character
 		case 805:r="Order of Operations List";break;
 		//-Popups/prompts-//
-		case 998:r="Role View Window";break;
 		case 999:r="Generic Window";break;
+		case 1001:r="Role Update";break;
 		default: r="Unknown";break;
 		}
 		return r;
@@ -169,5 +177,35 @@ public class DataPacket {
 		}
 		return r;
 	}
-
+	/**Returns object based data*/
+	public Object getObject(){
+		return object;
+	}
+	/**Converts bytes to an Object*/
+	private Object byteToObject(byte[] bytes){
+		ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
+		ObjectInput in = null;
+		Object object = null;
+		try {
+			try {
+				in = new ObjectInputStream(bis);
+				object = in.readObject();
+			}
+			catch (IOException e){e.printStackTrace();}
+			catch (ClassNotFoundException e){e.printStackTrace();}
+		}
+		finally{
+		try{
+			bis.close();
+		}
+		catch(IOException e){e.printStackTrace();}
+		try{
+			if(in != null){
+			  in.close();
+			}
+		}
+		catch(IOException e){e.printStackTrace();}
+		}
+		return object;
+	}
 }

@@ -94,7 +94,10 @@ public class RoleSearchPane extends JPanel{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(getSelectedRole() != 0){
-					Framework.Telnet.write("-roleview "+getSelectedRole());
+					//Framework.Telnet.write("-roleview "+getSelectedRole());
+					//TODO check if cached Role is on client, if not -roleview getSelectedRole()
+					//TODO if cached: -roleview getSelectedRole() roleVersion...server will update if client version out of date
+					Framework.Window.createIFrame("roleView",new String[] {""+getSelectedRole()});
 				}
 			}
 		};

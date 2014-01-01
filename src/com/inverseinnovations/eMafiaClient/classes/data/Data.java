@@ -21,6 +21,7 @@ public class Data {
 	public Match curMatch;// = new Match(Framework);
 	public int characterId = 0;
 	public HtmlPane chatOutput = new HtmlPane();
+	public RoleDataDisplay roleView = new RoleDataDisplay(false);
 	public DefaultListModel<List_Character> playerListModel = new DefaultListModel<List_Character>();
 	//public JList<Object> playerList = new JList<Object>(playerListModel);
 	public JXList playerList = new JXList(playerListModel);
@@ -49,17 +50,16 @@ public class Data {
 		roleSearchList.setCellRenderer(Framework.Window.CellRenderer.new RoleList());
 	}
 
-	public boolean serializeCharacter(CharacterSerialize chara){
+	public boolean serializeObject(String location, String fileName, Object object){
 		boolean success = false;
 		FileOutputStream fileOut = null;
 		ObjectOutputStream outObj = null;
 		try {
-			fileOut = new FileOutputStream(System.getProperty("user.dir") + "/cache/users/" +chara.eid+".usr");
+			fileOut = new FileOutputStream(System.getProperty("user.dir") + location +fileName);
 			outObj = new ObjectOutputStream(fileOut);
-			outObj.writeObject(chara);
+			outObj.writeObject(object);
 
 			success = true;
-			System.out.println("Character "+chara.name+" was serialized!");
 		}
 		catch (IOException e) {e.printStackTrace();}
 		finally{
@@ -77,15 +77,14 @@ public class Data {
 		return success;
 	}
 
-	public CharacterSerialize unserializeCharacter(final int eid){
+	public Object unserializeObject(String location, String fileName){
 		FileInputStream fileInput = null;
 		ObjectInputStream inputObj = null;
-		CharacterSerialize chara = null;
+		Object object = null;
 		try{
-			fileInput = new FileInputStream(System.getProperty("user.dir") + "/cache/users/" +eid+".usr");
+			fileInput = new FileInputStream(System.getProperty("user.dir") + location +fileName);
 			inputObj = new ObjectInputStream(fileInput);
-			chara = (CharacterSerialize) inputObj.readObject();
-			System.out.println("Character "+chara.name+" was loaded!");
+			object = inputObj.readObject();
 		}
 		catch (Exception e) {e.printStackTrace();}
 		finally{
@@ -100,6 +99,7 @@ public class Data {
 			catch (IOException e){e.printStackTrace();}
 			catch (NullPointerException e) {e.printStackTrace();}
 		}
-		return chara;
+		return object;
 	}
+
 }
