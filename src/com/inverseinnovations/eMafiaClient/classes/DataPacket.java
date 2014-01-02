@@ -55,6 +55,7 @@ public class DataPacket {
 		//-Chat functions-// 70 - 99
 		case 70:r="Lobby Chat Received";break;
 		case 71:r="Lobby Chat Received From Character";break;
+		case 72:r="Lobby Chat Received From Character2";break;
 		case 75:r="Lobby Player List Refresh";break;
 		case 76:r="Lobby Player List Add";break;
 		case 77:r="Lobby Player List Remove";break;
@@ -78,11 +79,11 @@ public class DataPacket {
 		case 801:r="Role Possible List";break;
 		case 802:r="Role Setup List";break;
 		case 803:r="Character ID Set";break;
-		case 804:r="Character Data Update";break;//TODO updates serialized character
 		case 805:r="Order of Operations List";break;
 		//-Popups/prompts-//
 		case 999:r="Generic Window";break;
 		case 1001:r="Role Update";break;
+		case 1002:r="Character Update";break;
 		default: r="Unknown";break;
 		}
 		return r;
@@ -164,6 +165,9 @@ public class DataPacket {
 	}
 	/**If data is a String Array, returns it*/
 	public String[] getStringArray(){
+		if(string instanceof String){
+			return new String[]{(String) string};
+		}
 		return (String[]) string;
 	}
 	/**If data is a String Array of Arrays, returns it*/

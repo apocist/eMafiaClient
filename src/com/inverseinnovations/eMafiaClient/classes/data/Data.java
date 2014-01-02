@@ -9,9 +9,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import javax.swing.*;
 
 import org.jdesktop.swingx.JXList;
+import com.inverseinnovations.sharedObjects.*;
 import com.inverseinnovations.eMafiaClient.*;
 import com.inverseinnovations.eMafiaClient.classes.Comparator_PlayerLobby;
 import com.inverseinnovations.eMafiaClient.classes.jobjects.*;
@@ -21,6 +25,7 @@ public class Data {
 	public Framework Framework;
 	public Match curMatch;// = new Match(Framework);
 	public int characterId = 0;
+	public Map<Integer, CharacterData> characterData = new LinkedHashMap<Integer, CharacterData>();
 	public HtmlPane chatOutput = new HtmlPane();
 	public RoleDataDisplay roleView = new RoleDataDisplay(false);
 	public DefaultListModel<List_Character> playerListModel = new DefaultListModel<List_Character>();
@@ -68,9 +73,9 @@ public class Data {
 		finally{
 			try {
 			    	//pretty hacky but it wasn't going to work anyway if either is null
-			    	if (outObj == null || fileOut == null) {
+			    	/*if (outObj == null || fileOut == null) {
 			    	    throw new NullPointerException();
-			    	}
+			    	}*/
 				outObj.close();
 				fileOut.close();
 			}

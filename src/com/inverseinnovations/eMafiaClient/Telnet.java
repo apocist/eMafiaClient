@@ -8,7 +8,8 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.SocketException;
 
-import com.inverseinnovations.sharedObjects.RoleData;
+import com.inverseinnovations.sharedObjects.*;
+import com.inverseinnovations.sharedObjects.CharacterData;
 import com.inverseinnovations.eMafiaClient.classes.DataPacket;
 import com.inverseinnovations.eMafiaClient.classes.Utils;
 import com.inverseinnovations.eMafiaClient.classes.data.*;
@@ -144,6 +145,11 @@ public class Telnet {
 				+ "\"><b>" + detail[1] + "</b></font><font color=\"FFFFFF\">: "
 				+ detail[2] + "</font>");
 	}
+	public void chatCharRecieved2(String[] detail) {
+		CharacterData chara = Framework.Data.characterData.get(Integer.parseInt(detail[0]));
+		Framework.Data.chatOutput.append("<font color=\""+chara.hexcolor+"\"><b>"+chara.name+"</b></font>"+
+				"<font color=\"FFFFFF\">: "+detail[1]+"</font>");
+	}
 
 	public void doCommand(DataPacket data) {
 		if (data != null) {
@@ -205,9 +211,13 @@ public class Telnet {
 														// from character
 				chatCharRecieved(data.getStringArray());
 				break;
+			case "Lobby Chat Received From Character2":// recieved lobby chat object based
+				// from character
+				chatCharRecieved2(data.getStringArray());
+				break;
 			case "Lobby Player List Refresh":// refresh lobby player list
 				Framework.Data.playerListModel.clear();
-				if (data.getStringArrayArray() != null) {
+				/*if (data.getStringArrayArray() != null) {
 					for (String[] s : data.getStringArrayArray()) {
 						if (s != null) {
 							Framework.Data.playerListModel
@@ -216,32 +226,40 @@ public class Telnet {
 											s[3]));
 						}
 					}
+				}*/
+				if (data.getStringArray() != null) {
+					for (String s : data.getStringArray()) {
+						if (s != null){if(Utils.isInteger(s)){
+							CharacterData chara = Framework.Data.characterData.get(Integer.parseInt(s));
+							Framework.Data.playerListModel.addElement(
+									new List_Character(Framework, chara.eid, chara.name, chara.hexcolor, chara.avatarUrl));
+						}}
+					}
 				}
 				Framework.Window.autoUpdateJAutoPanels();// XXX a temp fix
 				break;
 			case "Lobby Player List Add":// add player to lobby list
-				if (data.getStringArray() != null) {
+				/*if (data.getStringArray() != null) {
 					Framework.Data.playerListModel
-							.addElement(new List_Character(Framework, Integer
-									.parseInt(data.getStringArray()[0]), data
-									.getStringArray()[1],
-									data.getStringArray()[2], data
-											.getStringArray()[3]));
-				}
+							.addElement(
+									new List_Character(Framework, Integer.parseInt(data.getStringArray()[0]), data.getStringArray()[1],data.getStringArray()[2], data.getStringArray()[3])
+							);
+				}*/
+				if(data.getString() != null){if(Utils.isInteger(data.getString())){
+					CharacterData chara = Framework.Data.characterData.get(Integer.parseInt(data.getString()));
+					Framework.Data.playerListModel
+						.addElement(
+								new List_Character(Framework, chara.eid, chara.name, chara.hexcolor, chara.avatarUrl)
+						);
+				}}
 				break;
 			case "Lobby Player List Remove":// remove player from lobby list
-				if (data.getStringArray() != null) {
-					int eid = Integer.parseInt(data.getStringArray()[0]);
-					String name = data.getStringArray()[1];
-					for (int loop = 0; loop < Framework.Data.playerListModel
-							.getSize(); loop++) {
-						if (eid == Framework.Data.playerListModel
-								.get(loop).id) {
-							if (name.equals(Framework.Data.playerListModel
-									.get(loop).name)) {
-								Framework.Data.playerListModel.remove(loop);
-								break;
-							}
+				if (data.getString() != null) {
+					int eid = Integer.parseInt(data.getString());
+					for (int loop = 0; loop < Framework.Data.playerListModel.getSize(); loop++) {
+						if (eid == Framework.Data.playerListModel.get(loop).id) {
+							Framework.Data.playerListModel.remove(loop);
+							break;
 						}
 					}
 				}
@@ -491,24 +509,16 @@ public class Telnet {
 							.getString());
 				}
 				break;
-			case "Character Data Update":// TODO updates serialized character
-				if (data.getStringArray() != null) {
-					/*Framework.Data
-							.serializeCharacter(new CharacterSerialize(Integer
-									.parseInt(data.getStringArray()[0]), data
-									.getStringArray()[1],
-									data.getStringArray()[2], data
-											.getStringArray()[3]));
-					Framework.Data.unserializeCharacter(Integer.parseInt(data
-							.getStringArray()[0]));*/
-				}
-				break;
+
 			// -Popups/prompts-//
 
 			case "Generic Window":// generic popup
 				Framework.Window.createIFrame("popup",
 						new String[] { data.getString(1), "ok" });
 				break;
+
+			// -Object transfers-//
+
 			case "Role Update":// roleView changes
 				if(data.getObject() instanceof RoleData){
 					RoleData role = (RoleData)data.getObject();
@@ -516,7 +526,12 @@ public class Telnet {
 					Framework.Data.roleView.updateData(role);
 					Framework.Window.autoUpdateJAutoPanels();
 				}
-				//TODO serialize object as well
+				break;
+			case "Character Update":// character updates
+				if (data.getObject() instanceof CharacterData) {
+					CharacterData chara = (CharacterData) data.getObject();
+					Framework.Data.characterData.put(chara.eid, chara);
+				}
 				break;
 			default:
 				System.out.println(" ||| ***Command Control " + data.getControl()+ ":" + data.getCommand() + " non-Existant***");
