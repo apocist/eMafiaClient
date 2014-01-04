@@ -6,7 +6,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Map;
 
-public class TabbedPanel extends JTabbedPane {
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rtextarea.RTextScrollPane;
+
+public class TabbedPanel extends JTabbedPane{
 	private static final long serialVersionUID = 1L;
 	private boolean editable;
 
@@ -28,13 +31,20 @@ public class TabbedPanel extends JTabbedPane {
 	}
 
 	public void addTab(String title, String content){
-		JTextArea text = new JTextArea(content);
+		RSyntaxTextArea textArea = new RSyntaxTextArea(content);
+		textArea.setTabSize(3);
+		textArea.setCaretPosition(0);
+		textArea.setMarkOccurrences(true);
+		textArea.setCodeFoldingEnabled(true);
+		textArea.setClearWhitespaceLinesEnabled(true);
+		textArea.setSyntaxEditingStyle(org.fife.ui.rsyntaxtextarea.SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
+		textArea.setEditable(editable);
+		RTextScrollPane scrollPane = new RTextScrollPane(textArea, true);//true/false is if line numbers should appear
 
-		text.setEditable(editable);
-		JScrollPane scroll = new JScrollPane(text);
-		scroll.setPreferredSize(new Dimension(600,250));//This seems to be a quick fix for over expanding
+
+		scrollPane.setPreferredSize(new Dimension(600,250));//This seems to be a quick fix for over expanding
 		@SuppressWarnings("unused")
-		Component comp = add(title, new JScrollPane(scroll));
+		Component comp = add(title, scrollPane);
 	}
 
 	public void addTabSet(Map<String, String> set){
@@ -46,4 +56,6 @@ public class TabbedPanel extends JTabbedPane {
 			}
 		}
 	}
+
+
 }

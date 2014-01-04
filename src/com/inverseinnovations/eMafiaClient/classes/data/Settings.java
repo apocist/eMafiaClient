@@ -1,4 +1,4 @@
-/* eMafiaClient - RoleSearchPane.java
+/* eMafiaClient - Settings.java
 Copyright (C) 2013  Matthew 'Apocist' Davis */
 package com.inverseinnovations.eMafiaClient.classes.data;
 
