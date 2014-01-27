@@ -70,6 +70,8 @@ public class JAutoPanel extends JPanel{
 
 	wid = pSize.width < mSize.width  ? mSize.width : pSize.width;
 	ht = pSize.height < mSize.height ? mSize.height: pSize.height;
+	if(wid > pane.getWidth()){wid = pane.getWidth();}
+	if(ht > pane.getHeight()){ht = pane.getHeight();}
 	return new Dimension(wid, ht);
 	}
 }

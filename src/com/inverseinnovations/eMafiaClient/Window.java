@@ -20,7 +20,6 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
-
 import com.inverseinnovations.eMafiaClient.classes.*;
 import com.inverseinnovations.eMafiaClient.classes.data.List_Role;
 import com.inverseinnovations.eMafiaClient.classes.jobjects.*;
@@ -41,6 +40,7 @@ public class Window extends Frame {
 		this.Framework = framework;
 		this.CellRenderer = new CellRenderer(Framework);
 		setSize(800, 600);// client window size
+		setLocationRelativeTo(null);
 		setMinimumSize(new Dimension(800, 600));
 		this.desktop = new JDesktopPane();
 		desktop.setOpaque(true);// defualt=true
@@ -230,7 +230,7 @@ public class Window extends Frame {
 			frame = window_roleView(layer, parameters[0]);
 			break;
 		case "popup":
-			frame = window_popup(parameters[0], parameters[1], layer);
+			frame = window_popup(parameters[0], parameters[1],parameters[2], layer);
 			break;
 		}
 		return frame;
@@ -1357,11 +1357,11 @@ public class Window extends Frame {
 		return frame;
 	}
 
-	private JAutoPanel window_popup(String msg, String msgType, final Integer layer) {
+	private JAutoPanel window_popup(String msg, String msgType, String html, final Integer layer) {
 		JAutoPanel frame = new JAutoPanel(this.desktop);
 
 		// JLabel dialogText = new JLabel(msg);
-		JEditorPane dialogText = new JEditorPane("text/html", msg);
+		JEditorPane dialogText = new JEditorPane();
 		dialogText.addHyperlinkListener(new HyperlinkListener() {
 			public void hyperlinkUpdate(HyperlinkEvent arg0) {
 				if (HyperlinkEvent.EventType.ACTIVATED.equals(arg0
@@ -1383,7 +1383,8 @@ public class Window extends Frame {
 				}
 			}
 		});
-		// dialogText.setText(msg);
+		if(html.equals("html")){dialogText.setContentType("text/html");}
+		dialogText.setText(msg);
 		dialogText.setEditable(false);
 		dialogText.setOpaque(false);
 		dialogText.setBorder(new EmptyBorder(10, 10, 20, 10));
@@ -1434,9 +1435,16 @@ public class Window extends Frame {
 			dialogOKBut.setAction(okAction);
 			dialogOKBut.setText("Bug in making this button!");
 		}
-		// this.dialogOKBut.addActionListener(new CloseListener());
+		//Dimension xy = new Dimension();
+		//xy.setSize(arg0)
+		//dialogText.setMinimumSize(new Dimension(0, 0));
+
+		//dialogText.setSize(new Dimension(600,400));
+		JScrollPane dialogScroll = new JScrollPane(dialogText);
+		//dialogScroll.setMaximumSize(this.desktop.getSize());
+		dialogScroll.setMaximumSize(new Dimension(this.desktop.getWidth() - 50,530));
 		JPanel panel = new JPanel(new BorderLayout());
-		panel.add(dialogText, BorderLayout.CENTER);
+		panel.add(dialogScroll, BorderLayout.CENTER);
 		panel.add(dialogOKBut, BorderLayout.PAGE_END);
 		panel.setBorder(new EmptyBorder(10, 10, 10, 10));
 		frame.add(panel);

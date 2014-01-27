@@ -512,9 +512,13 @@ public class Telnet {
 
 			// -Popups/prompts-//
 
-			case "Generic Window":// generic popup
+			case "Generic Popup":// generic popup
 				Framework.Window.createIFrame("popup",
-						new String[] { data.getString(1), "ok" });
+						new String[] { data.getString(1), "ok","" });
+				break;
+			case "Generic HTML Popup":// generic html-styled popup
+				Framework.Window.createIFrame("popup",
+						new String[] { data.getString(1), "ok", "html" });
 				break;
 
 			// -Object transfers-//

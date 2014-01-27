@@ -81,7 +81,8 @@ public class DataPacket {
 		case 803:r="Character ID Set";break;
 		case 805:r="Order of Operations List";break;
 		//-Popups/prompts-//
-		case 999:r="Generic Window";break;
+		case 998:r="Generic Popup";break;
+		case 999:r="Generic HTML Popup";break;
 		case 1001:r="Role Update";break;
 		case 1002:r="Character Update";break;
 		default: r="Unknown";break;
