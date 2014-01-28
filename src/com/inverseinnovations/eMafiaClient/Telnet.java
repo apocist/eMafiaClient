@@ -2,11 +2,17 @@
 Copyright (C) 2012  Matthew 'Apocist' Davis */
 package com.inverseinnovations.eMafiaClient;
 
+import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
+import java.math.BigInteger;
 import java.net.Socket;
 import java.net.SocketException;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
 
 import com.inverseinnovations.sharedObjects.*;
 import com.inverseinnovations.sharedObjects.CharacterData;
@@ -18,7 +24,7 @@ public class Telnet {
 	public final Framework Framework;
 	private Socket soc = null;
 	private DataInputStream in;
-	private PrintWriter out;
+	private DataOutputStream out;
 	public boolean SERVERRUNNING = true;
 	public boolean MANUELDC = false;
 	public String var1, var2;
@@ -41,7 +47,8 @@ public class Telnet {
 			// in = new BufferedReader(new
 			// InputStreamReader(soc.getInputStream()));
 			in = new DataInputStream(soc.getInputStream());
-			out = new PrintWriter(soc.getOutputStream());
+			//out = new PrintWriter(soc.getOutputStream());
+			out = new DataOutputStream(soc.getOutputStream());
 
 			new Thread(null, null, "Telnet Listener") {
 				public void run() {
@@ -119,16 +126,142 @@ public class Telnet {
 		return;
 	}
 
-	public void write(String value) {
+	public void write(String string){
+		write(string, null);
+	}
+	public void write(String string, Object data) {
 		try {
-			out.println(value);
-			out.flush();
-			System.out.println("--> " + value);
+			//new
+			byte[] commandBytes = null;
+			int size = 0;
+			if(string != null){if(string != ""){
+				commandBytes = string.getBytes(Charset.forName("ISO-8859-1"));
+				size = commandBytes.length;
+			}}
+			byte[] cmdSize = new byte[1];
+			//for (int i=1; i>=0; i--) {
+				cmdSize[0] = (byte) (size & 0xff);
+				size >>= 4;//need to change this to one byte instead
+			//}
+			//so now got the size of Command and command
+			byte[] dataBytes = null;
+			size = 0;
+			if(data != null){
+				dataBytes = objectToByte(data);
+				size = dataBytes.length;
+			}
+			byte[] dataSize = new byte[2];
+			for (int i=1; i>=0; i--) {
+				dataSize[i] = (byte) (size & 0xff);
+				size >>= 8;
+			}
+			//now got data...kinda
+			ByteArrayList array = new ByteArrayList(new byte[]{0x00});
+			array.append(cmdSize);
+			array.append(commandBytes);
+			array.append(dataSize);
+			if(data != null){array.append(dataBytes);}
+			array.append(new byte[]{(byte) 0xff});
+			//TODO more to go
+			//{00}{cmdSize(1 byte)}{commandBytes(up to 255 bytes)}{FF}{FF}
+			//new end
+			//out.println(string);
+			//out.flush();
+			out.write(array.toByteArray());
+			System.out.println("--> " + string);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
+	/**
+	 * Wrapper class to provide ease of converting Strings, ints, and bytes
+	 * into a series of bytes.
+	 */
+	public static class ByteArrayList extends ArrayList<Byte>{
+		private static final long serialVersionUID = 1L;
+		/**
+		 * Wrapper class to provide ease of converting Strings, ints, and bytes
+		 * into a series of bytes.
+		 */
+		public ByteArrayList(){
+			super();
+		}
+		/**
+		 * Wrapper class to provide ease of converting Strings, ints, and bytes
+		 * into a series of bytes.
+		 */
+		public ByteArrayList(byte[] byteArray){
+			super();
+			for(byte b : byteArray){
+				this.add(b);
+			}
+		}
+		/**Appends a series of bytes*/
+		public void append(byte[] byteArray){
+			for(byte b : byteArray){
+				this.add(b);
+			}
+		}
+		/**Appends a ByteArrayList*/
+		public void append(ByteArrayList arrayList){
+			for(byte b : arrayList){
+				this.add(b);
+			}
+		}
+		/**Appends an int*/
+		public void append(int i){
+			append(BigInteger.valueOf(i).toByteArray());
+		}
+		/**Appends a String*/
+		public void append(String i){
+			append(String.valueOf(i).getBytes());
+		}
+		/**Converts the ByteArrayList into byte[]*/
+		public byte[] toByteArray(){
+			byte[] byteArray = new byte[this.size()];
+			for(int i = 0; i<this.size(); i++){
+				byteArray[i] = this.get(i);
+			}
+			return byteArray;
+		}
+	}
+	/**
+	 * Converts an Object to byte[]
+	 * @param object Object to Convert to byte[]
+	 * @return null on IOException
+	 */
+	public static byte[] objectToByte(Object object){
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		ObjectOutput out = null;
+		byte[] yourBytes = null;
+		try {
+			try {
+				out = new ObjectOutputStream(bos);
+				out.writeObject(object);
+			}
+			catch (IOException e) {
+			}
+			yourBytes = bos.toByteArray();
+		}
+		finally{
+			try{
+				if (out != null){
+				out.close();
+				}
+			}
+			catch (IOException ex){
+				// ignore close exception
+			}
+			try{
+				bos.close();
+			}
+			catch(IOException ex){
+				// ignore close exception
+			}
+		}
+		return yourBytes;
+	}
 	public void chatRecieved(String[] detail) {
 		if (detail[0].equals("<><hr>")) {
 			if (Framework.Data.chatOutput.lastMsg
