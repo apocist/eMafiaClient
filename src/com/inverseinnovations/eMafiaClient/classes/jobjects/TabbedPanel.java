@@ -4,9 +4,11 @@ package com.inverseinnovations.eMafiaClient.classes.jobjects;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rtextarea.RTextArea;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
 public class TabbedPanel extends JTabbedPane{
@@ -57,5 +59,39 @@ public class TabbedPanel extends JTabbedPane{
 		}
 	}
 
+	/**
+	 * Generates Map of all scripts within this role
+	 */
+	public Map<String, String> getErsScripts(){
+		Map<String, String> ersScript = new LinkedHashMap<String, String>();
+		int indexes = this.getTabCount()-1;
+		if(indexes > 0){
+			for(int index = 0;index <= indexes;index++){
+				Component comp = this.getComponentAt(index);
+				if(comp instanceof RTextScrollPane){
+					String scriptName = this.getTitleAt(index);
+					RTextArea textArea = ((RTextScrollPane) comp).getTextArea();
+					if(textArea != null){
+						ersScript.put(scriptName, textArea.getText());
+					}
+				}
+			}
+		}
+		return ersScript;
+	}
+
+	/**
+	 * Changes whether each Tab's content may be editted
+	 */
+	public void updateEditablilty(boolean editable){
+		for (Component comp : this.getComponents()) {
+			if (comp instanceof RTextScrollPane) {
+				RTextArea textArea = ((RTextScrollPane) comp).getTextArea();
+				if(textArea != null){
+					textArea.setEditable(editable);
+				}
+			}
+		}
+	}
 
 }

@@ -118,7 +118,7 @@ public class Telnet {
 			System.out.println("Connection Socket Error\n");
 			SERVERRUNNING = false;
 			if(!MANUELDC){
-				Framework.Window.createIFrame("popup", new String[] {"<html><b>You were Disconnected from eMafia</b></html>","exit" });
+				Framework.Window.createIFrame("popup", new String[] {"<html><b>You were Disconnected from eMafia</b></html>","exit","html" });
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -293,7 +293,7 @@ public class Telnet {
 					//System.out.println("Latest version is "+data.getString()+", currently at "+Framework.Settings.CLIENT_BUILD);
 					MANUELDC = true;
 					disconnect();
-					Framework.Window.createIFrame("popup", new String[] {"<center>Latest version is Build "+data.getString()+", currently at Build "+Framework.Settings.CLIENT_BUILD+"<br>Update required!</center>", "update"});
+					Framework.Window.createIFrame("popup", new String[] {"<center>Latest version is Build "+data.getString()+", currently at Build "+Framework.Settings.CLIENT_BUILD+"<br>Update required!</center>", "update","html"});
 				}
 				break;
 			case "Password":// Asking for password..if FINAL, remove from client

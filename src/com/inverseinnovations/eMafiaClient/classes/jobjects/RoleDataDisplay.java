@@ -11,13 +11,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import com.inverseinnovations.eMafiaClient.classes.Utils;
 import com.inverseinnovations.sharedObjects.RoleData;
 
 public class RoleDataDisplay extends JPanel{
 	private static final long serialVersionUID = 1L;
 	private boolean editable = false;
 	private String[] targetables = { "No One","Everyone","Everyone Except Self","Self Only" };
-	private TabbedPanel scriptsTabbed;
+	private TabbedPanel scriptsTabbed = new TabbedPanel(this.editable);;
 	private JLabel roleIdData = new JLabel();
 	private JTextField roleNameData = new JTextField(15);
 	private JTextField roleAffData = new JTextField(15);
@@ -27,6 +28,8 @@ public class RoleDataDisplay extends JPanel{
 	private JComboBox<String> targetD2 = new JComboBox<String>();
 	private JCheckBox roleOnTeamData = new JCheckBox();
 	private JTextField roleTeamNameData = new JTextField(15);
+	private JCheckBox roleNightChatData = new JCheckBox();
+	private JCheckBox roleVisibleTeamData = new JCheckBox();
 	private JCheckBox roleTeamWinData = new JCheckBox();
 	private JPanel roleTeamRightPanel = new JPanel();//to show turning inviso
 
@@ -95,11 +98,20 @@ public class RoleDataDisplay extends JPanel{
 		JPanel roleTeamNamePanel = new JPanel();
 		roleTeamNamePanel.setLayout(new BoxLayout(roleTeamNamePanel, BoxLayout.X_AXIS));
 		roleTeamNamePanel.add(new JLabel("Team Name: "));roleTeamNamePanel.add(roleTeamNameData);
+		JPanel roleNightChatPanel = new JPanel();
+		roleNightChatPanel.setLayout(new BoxLayout(roleNightChatPanel, BoxLayout.X_AXIS));
+		roleNightChatPanel.add(new JLabel("Night Chat: "));roleNightChatPanel.add(roleNightChatData);roleNightChatData.setSelected(false);
+		JPanel roleVisibleTeamPanel = new JPanel();
+		roleVisibleTeamPanel.setLayout(new BoxLayout(roleVisibleTeamPanel, BoxLayout.X_AXIS));
+		roleVisibleTeamPanel.add(new JLabel("Visible Teammates: "));roleVisibleTeamPanel.add(roleVisibleTeamData);roleVisibleTeamData.setSelected(false);
 		JPanel roleTeamWinPanel = new JPanel();
 		roleTeamWinPanel.setLayout(new BoxLayout(roleTeamWinPanel, BoxLayout.X_AXIS));
 		roleTeamWinPanel.add(new JLabel("Win with Team: "));roleTeamWinPanel.add(roleTeamWinData);roleTeamWinData.setSelected(true);
+		JPanel roleTeamRightLowerPanel = new JPanel();
+		roleTeamRightLowerPanel.setLayout(new BoxLayout(roleTeamRightLowerPanel, BoxLayout.X_AXIS));
+		roleTeamRightLowerPanel.add(roleNightChatPanel);roleTeamRightLowerPanel.add(roleVisibleTeamPanel);roleTeamRightLowerPanel.add(roleTeamWinPanel);
 		roleTeamRightPanel.setLayout(new BoxLayout(roleTeamRightPanel, BoxLayout.Y_AXIS));
-		roleTeamRightPanel.add(roleTeamNamePanel);roleTeamRightPanel.add(roleTeamWinPanel);
+		roleTeamRightPanel.add(roleTeamNamePanel);roleTeamRightPanel.add(roleTeamRightLowerPanel);
 		JPanel roleTeamAllPanels = new JPanel();
 		roleTeamAllPanels.setLayout(new BoxLayout(roleTeamAllPanels, BoxLayout.X_AXIS));
 		roleTeamAllPanels.add(roleTeamLeftPanel);roleTeamAllPanels.add(roleTeamRightPanel);
@@ -108,6 +120,31 @@ public class RoleDataDisplay extends JPanel{
 		scriptsTabbed = new TabbedPanel(this.editable);
 		//scriptsTabbed.setSize(new Dimension(300,200));
 		add(scriptsTabbed);
+	}
+
+	/**
+	 * Change current settings into a new RoleData
+	 */
+	public RoleData convertToRoleData(){
+		RoleData data = new RoleData();
+		if(Utils.isInteger(roleIdData.getText())){
+			data.id = Integer.parseInt(roleIdData.getText());
+		}
+		data.name = roleNameData.getText();
+		data.affiliation = roleAffData.getText();
+		data.targetablesNight1 = targetN1.getSelectedIndex();
+		data.targetablesNight2= targetN2.getSelectedIndex();
+		data.targetablesDay1 = targetD1.getSelectedIndex();
+		data.targetablesDay2 = targetD2.getSelectedIndex();
+
+		data.teamName = roleTeamNameData.getText();
+		if(data.teamName.isEmpty()){data.teamName = null;}
+		data.chatAtNight = roleNightChatData.isSelected();
+		data.visibleTeam = roleVisibleTeamData.isSelected();
+		data.teamWin = roleTeamWinData.isSelected();
+
+		data.ersScript = scriptsTabbed.getErsScripts();
+		return data;
 	}
 
 	public void updateData(RoleData data){
@@ -135,6 +172,8 @@ public class RoleDataDisplay extends JPanel{
 			roleTeamRightPanel.setVisible(roleOnTeamData.isSelected());
 
 			roleTeamNameData.setText(data.teamName);
+			roleNightChatData.setSelected(data.chatAtNight);
+			roleVisibleTeamData.setSelected(data.visibleTeam);
 			roleTeamWinData.setSelected(data.teamWin);
 
 			scriptsTabbed.removeAll();
@@ -159,7 +198,7 @@ public class RoleDataDisplay extends JPanel{
 		roleTeamNameData.setEditable(editable);
 		roleTeamWinData.setEnabled(editable);
 
-		//scriptsTabbed.setEditable(editable);
+		scriptsTabbed.updateEditablilty(editable);
 	}
 
 

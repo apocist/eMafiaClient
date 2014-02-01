@@ -998,7 +998,7 @@ public class Window extends Frame {
 			}
 		});
 		possibleBut.setPreferredSize(new Dimension(15, 10));
-		JButton orderofOpsBut = new JButton("<html><font size=\"1\">Order of Operations</font></html>");
+		JButton orderofOpsBut = new JButton("<html><font size=\"1\">Order of Ops</font></html>");
 		orderofOpsBut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				deleteIFrame(layer);// delets self
@@ -1327,18 +1327,46 @@ public class Window extends Frame {
 		JAutoPanel frame = new JAutoPanel(this.desktop);
 
 		Framework.Data.roleView = new RoleDataDisplay(false);
+		final JButton dialogEditBut = new JButton("Edit");
+		final JButton dialogSaveBut = new JButton("Save");dialogSaveBut.setVisible(false);
 		JButton dialogDoneBut = new JButton("Done");
+		dialogEditBut.setAction(new AbstractAction("Edit") {
+			private static final long serialVersionUID = 1L;
+			public void actionPerformed(ActionEvent evt) {
+				Framework.Data.roleView.updateEditablilty(true);
+				dialogEditBut.setVisible(false);
+				dialogSaveBut.setVisible(true);
+
+			}
+		});
+		dialogSaveBut.setAction(new AbstractAction("Save") {
+			private static final long serialVersionUID = 1L;
+			public void actionPerformed(ActionEvent evt) {
+				Framework.Data.roleView.updateEditablilty(false);
+				dialogSaveBut.setVisible(false);
+				//TODO upload to server
+				Framework.Telnet.write("-roleedit", Framework.Data.roleView.convertToRoleData());
+				dialogEditBut.setVisible(true);
+
+
+
+			}
+		});
 		dialogDoneBut.setAction(new AbstractAction("Done") {
 			private static final long serialVersionUID = 1L;
-
 			public void actionPerformed(ActionEvent evt) {
 				deleteIFrame(layer);// delets the poplayer
 			}
 		});
+
+		JPanel buttonRow = new JPanel();
+		buttonRow.setLayout(new BoxLayout(buttonRow, BoxLayout.X_AXIS));
+		buttonRow.add(dialogEditBut);buttonRow.add(dialogSaveBut);buttonRow.add(dialogDoneBut);
+
 		JPanel mainP = new JPanel();
 		mainP.setLayout(new BoxLayout(mainP, BoxLayout.Y_AXIS));
 		mainP.add(Framework.Data.roleView);
-		mainP.add(dialogDoneBut);
+		mainP.add(buttonRow);
 		frame.add(mainP);
 		//check for cache
 		if(Utils.isInteger(roleId)){
