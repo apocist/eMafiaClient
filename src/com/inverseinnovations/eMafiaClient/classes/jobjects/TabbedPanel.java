@@ -3,6 +3,7 @@ Copyright (C) 2013  Matthew 'Apocist' Davis */
 package com.inverseinnovations.eMafiaClient.classes.jobjects;
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -33,6 +34,20 @@ public class TabbedPanel extends JTabbedPane{
 	}
 
 	public void addTab(String title, String content){
+		//remove the add tab button first
+		if(editable){
+			for(int i = 0;i < getTabCount(); i++){
+				Component comp = getTabComponentAt(i);
+				if(comp instanceof AddTabPanel){
+					int r = indexOfTabComponent(comp);
+					if (r != -1) {
+						this.remove(i);
+					}
+				}
+			}
+		}
+
+		//add the new tab
 		RSyntaxTextArea textArea = new RSyntaxTextArea(content);
 		textArea.setTabSize(3);
 		textArea.setCaretPosition(0);
@@ -42,11 +57,19 @@ public class TabbedPanel extends JTabbedPane{
 		textArea.setSyntaxEditingStyle(org.fife.ui.rsyntaxtextarea.SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
 		textArea.setEditable(editable);
 		RTextScrollPane scrollPane = new RTextScrollPane(textArea, true);//true/false is if line numbers should appear
-
-
 		scrollPane.setPreferredSize(new Dimension(600,250));//This seems to be a quick fix for over expanding
-		@SuppressWarnings("unused")
-		Component comp = add(title, scrollPane);
+		add(title, scrollPane);
+
+		//replaces tab title with UI
+		TabPanel titleUI = new TabPanel(title);
+		titleUI.setClosable(editable);
+		this.setTabComponentAt(getTabCount()-1, titleUI);
+
+		//re-add the addTab(this amkes surde the add tab is on the end)
+		if(editable){
+			add("+", null);
+			setTabComponentAt(getTabCount()-1, new AddTabPanel());
+		}
 	}
 
 	public void addTabSet(Map<String, String> set){
@@ -59,6 +82,58 @@ public class TabbedPanel extends JTabbedPane{
 		}
 	}
 
+	private class TabPanel extends JPanel{
+		private static final long serialVersionUID = 1L;
+		private JLabel closeBut = new JLabel("x");
+		public TabPanel(String name){
+			setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+			setOpaque(false);
+			setBorder(javax.swing.BorderFactory.createEmptyBorder());
+			JLabel title = new JLabel(name+" ");
+			title.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+			add(title);
+			closeBut.setForeground(Color.red);
+			closeBut.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+			closeBut.addMouseListener(new java.awt.event.MouseAdapter() {
+				public void mouseClicked(java.awt.event.MouseEvent evt) {
+					int i = TabbedPanel.this.indexOfTabComponent(TabPanel.this);
+					if (i != -1) {
+						TabbedPanel.this.remove(i);
+					}
+				}
+			});
+			add(closeBut);//use as close button for now
+			closeBut.setEnabled(false);
+			closeBut.setVisible(false);
+		}
+
+		public void setClosable(boolean closable){
+			closeBut.setEnabled(closable);
+			closeBut.setVisible(closable);
+		}
+	}
+
+
+	/**
+	 * For use as a TabLabel, clicking will allow user to add an additional script tab
+	 */
+	private class AddTabPanel extends JPanel{
+		private static final long serialVersionUID = 1L;
+		public AddTabPanel(){
+			setOpaque(false);
+			setBorder(javax.swing.BorderFactory.createEmptyBorder());
+			JLabel label = new JLabel("+");
+			label.setForeground(Color.green);
+			label.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+			setToolTipText("Add new script");
+			add(label);
+			this.addMouseListener(new java.awt.event.MouseAdapter() {
+				public void mouseClicked(java.awt.event.MouseEvent evt) {
+					//TODO make popup to allow user to select which scriptName to add
+				}
+			});
+		}
+	}
 	/**
 	 * Generates Map of all scripts within this role
 	 */
@@ -70,9 +145,11 @@ public class TabbedPanel extends JTabbedPane{
 				Component comp = this.getComponentAt(index);
 				if(comp instanceof RTextScrollPane){
 					String scriptName = this.getTitleAt(index);
-					RTextArea textArea = ((RTextScrollPane) comp).getTextArea();
-					if(textArea != null){
-						ersScript.put(scriptName, textArea.getText());
+					if(!scriptName.equals("+")){
+						RTextArea textArea = ((RTextScrollPane) comp).getTextArea();
+						if(textArea != null){
+							ersScript.put(scriptName, textArea.getText());
+						}
 					}
 				}
 			}
@@ -91,6 +168,22 @@ public class TabbedPanel extends JTabbedPane{
 					textArea.setEditable(editable);
 				}
 			}
+		}
+		for(int i = 0;i < this.getTabCount(); i++){
+			Component comp = this.getTabComponentAt(i);
+			if(comp instanceof TabPanel){
+				((TabPanel) comp).setClosable(editable);
+			}
+			if(comp instanceof AddTabPanel){
+				int r = TabbedPanel.this.indexOfTabComponent(comp);
+				if (r != -1) {
+					TabbedPanel.this.remove(i);
+				}
+			}
+		}
+		if(editable){
+			add("+", null);
+			setTabComponentAt(getTabCount()-1, new AddTabPanel());
 		}
 	}
 
