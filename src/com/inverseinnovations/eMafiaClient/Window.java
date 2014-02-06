@@ -121,10 +121,15 @@ public class Window extends Frame {
 		}
 	}
 
-	public void createIFrame(String windowType) {
-		createIFrame(windowType, null);
+	public Integer createIFrame(String windowType) {
+		return createIFrame(windowType, null, null);
 	}
-
+	public Integer createIFrame(String windowType, String[] parameters) {
+		return createIFrame(windowType, parameters, null);
+	}
+	public Integer createIFrame(String windowType, JPanel panel) {
+		return createIFrame(windowType, null, panel);
+	}
 	/**
 	 * Creates a frame in the desktop: <br>
 	 * <br>
@@ -134,16 +139,15 @@ public class Window extends Frame {
 	 *            (login,popup,matchSetup,ect)
 	 * @return
 	 */
-	public void createIFrame(String windowType, String[] parameters) {
+	public Integer createIFrame(String windowType, String[] parameters, JPanel panel) {
 		Integer layer = layerName(windowType);
-		JAutoPanel p = contentIFrame(windowType, parameters, layer);// grabs the
-																	// content
-																	// to place
-																	// in frame
+		// grabs the content to place in frame
+		JAutoPanel p = contentIFrame(windowType, parameters, panel, layer);
 		if (p != null) {
 			desktop.add(p, layer);
 			p.setVisible(true);
 		}
+		return layer;
 	}
 
 	public void clickButtonAtJXList(org.jdesktop.swingx.JXList list,
@@ -181,8 +185,7 @@ public class Window extends Frame {
 	 * @param type
 	 *            Type of Window
 	 */
-	private JAutoPanel contentIFrame(String windowType, String[] parameters,
-			Integer layer) {
+	private JAutoPanel contentIFrame(String windowType, String[] parameters, JPanel panel, Integer layer) {
 		JAutoPanel frame = null;
 		if (parameters == null) {
 			parameters = new String[] { "" };
@@ -212,8 +215,6 @@ public class Window extends Frame {
 		case "roleMenu":
 			frame = window_roleMenu(layer);
 			break;
-		// case "rolesPossibleAndSetup":frame =
-		// window_rolesPossibleAndSetup(layer);break;
 		case "rolesPossible":
 			frame = window_rolesPossibleHost(layer);
 			break;
@@ -231,6 +232,9 @@ public class Window extends Frame {
 			break;
 		case "popup":
 			frame = window_popup(parameters[0], parameters[1],parameters[2], layer);
+			break;
+		case "popupcustom":
+			frame = window_popupCustom(panel, layer);
 			break;
 		}
 		return frame;
@@ -656,11 +660,8 @@ public class Window extends Frame {
 		JPasswordField passwordField = new JPasswordField(15);
 		passwordField.setName("password");
 		JButton regBut = new JButton("Create Account");
-		Action regAction = new AbstractAction("Create Account") {// XXX:verify
-																	// password
-																	// is a
-																	// certain
-																	// length
+		Action regAction = new AbstractAction("Create Account") {
+			// XXX:verify password is a certain length
 			private static final long serialVersionUID = 1L;
 
 			@SuppressWarnings("deprecation")
@@ -1326,7 +1327,7 @@ public class Window extends Frame {
 	private JAutoPanel window_roleView(final Integer layer, String roleId) {
 		JAutoPanel frame = new JAutoPanel(this.desktop);
 
-		Framework.Data.roleView = new RoleDataDisplay(false);
+		Framework.Data.roleView = new RoleDataDisplay(this, false);
 		final JButton dialogEditBut = new JButton("Edit");
 		final JButton dialogSaveBut = new JButton("Save");dialogSaveBut.setVisible(false);
 		JButton dialogDoneBut = new JButton("Done");
@@ -1418,7 +1419,6 @@ public class Window extends Frame {
 		dialogText.setBorder(new EmptyBorder(10, 10, 20, 10));
 		Action okAction = new AbstractAction("OK") {
 			private static final long serialVersionUID = 1L;
-
 			public void actionPerformed(ActionEvent evt) {
 				deleteIFrame(layer);// delets the poplayer
 			}
@@ -1476,6 +1476,25 @@ public class Window extends Frame {
 		panel.add(dialogOKBut, BorderLayout.PAGE_END);
 		panel.setBorder(new EmptyBorder(10, 10, 10, 10));
 		frame.add(panel);
+		frame.setSize(frame.getPreferredSize());
+		frame.setAutoCenter();
+		return frame;
+	}
+
+	private JAutoPanel window_popupCustom(JPanel panel, final Integer layer) {
+		JAutoPanel frame = new JAutoPanel(this.desktop);
+		frame.setLayout(new BoxLayout(frame, BoxLayout.Y_AXIS));
+		frame.add(panel);
+
+		JButton dialogOKBut = new JButton("Done");
+		dialogOKBut.setAction(new AbstractAction("Done") {
+			private static final long serialVersionUID = 1L;
+			public void actionPerformed(ActionEvent evt) {
+				deleteIFrame(layer);
+			}
+		});
+
+		//frame.add(dialogOKBut);
 		frame.setSize(frame.getPreferredSize());
 		frame.setAutoCenter();
 		return frame;

@@ -11,17 +11,19 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import com.inverseinnovations.eMafiaClient.Window;
 import com.inverseinnovations.eMafiaClient.classes.Utils;
 import com.inverseinnovations.sharedObjects.RoleData;
 
 public class RoleDataDisplay extends JPanel{
 	private static final long serialVersionUID = 1L;
+	public Window Window;
 	private boolean editable = false;
 	private String[] affiliations = {"TOWN","MAFIA","NEUTRAL"};
 	private String[] categories = {"","CORE","BENIGN","POWER","SUPPORT","INVESTIGATIVE","PROTECTIVE","KILLING","DECEPTION"};
 	private String[] targetables = {"No One","Everyone","Everyone Except Self","Self Only"};
 	private String[] actionCats = {"Jail","Vest","Witch","Busdrive","Roleblock","Frame","Douse","Heal","Kill","Clean","Invest","Disguise","Recruit"};
-	private TabbedPanel scriptsTabbed = new TabbedPanel(this.editable);;
+	private TabbedPanel scriptsTabbed;
 	private JLabel roleIdData = new JLabel();
 	private JTextField roleNameData = new JTextField(15);
 	private JComboBox<String> roleAffData = new JComboBox<String>();
@@ -39,13 +41,15 @@ public class RoleDataDisplay extends JPanel{
 	private JCheckBox roleTeamWinData = new JCheckBox();
 	private JPanel roleTeamRightPanel = new JPanel();//to show turning inviso
 
-	public RoleDataDisplay(){
-		this(false);
+	public RoleDataDisplay(Window window){
+		this(window, false);
 	}
 
-	public RoleDataDisplay(boolean editable){
+	public RoleDataDisplay(Window window, boolean editable){
+		this.Window = window;
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.editable = editable;
+		scriptsTabbed = new TabbedPanel(Window, this.editable);
 		updateEditablilty();
 
 		JPanel roleIdPanel = new JPanel();
@@ -147,7 +151,6 @@ public class RoleDataDisplay extends JPanel{
 		roleTeamAllPanels.add(roleTeamLeftPanel);roleTeamAllPanels.add(roleTeamRightPanel);
 		add(roleTeamAllPanels);
 
-		scriptsTabbed = new TabbedPanel(this.editable);
 		//scriptsTabbed.setSize(new Dimension(300,200));
 		add(scriptsTabbed);
 	}

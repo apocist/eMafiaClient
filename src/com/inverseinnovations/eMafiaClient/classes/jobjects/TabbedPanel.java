@@ -5,6 +5,7 @@ package com.inverseinnovations.eMafiaClient.classes.jobjects;
 import javax.swing.*;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -12,35 +13,42 @@ import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rtextarea.RTextArea;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
+import com.inverseinnovations.eMafiaClient.Window;
+
 public class TabbedPanel extends JTabbedPane{
 	private static final long serialVersionUID = 1L;
+	public Window Window;
+	private String[] scriptNames = {"","onStartup","onDayStart","onDayTargetChoice","onDayEnd","onNightStart","onNightTargetChoice","onNightEnd","onVisit","onAttacked","onLynch","onDeath","victoryCon","mayGameEndCon"};
 	private boolean editable;
 
-	public TabbedPanel(){
-		this(false);
+	public TabbedPanel(Window window){
+		this(window, false);
 	}
 
-	public TabbedPanel(boolean editable){
+	public TabbedPanel(Window window, boolean editable){
+		this.Window = window;
 		this.editable = editable;
 		setTabLayoutPolicy(JTabbedPane.WRAP_TAB_LAYOUT);
 	}
 
-	public void addTab(){
+	/*public void addTab(){
 		addTab("New Tab");
 	}
 
 	public void addTab(String title){
 		addTab(title, title+" entry");
-	}
+	}*/
 
 	public void addTab(String title, String content){
 		//remove the add tab button first
 		if(editable){
+			System.out.println("Should be removing the +'s");
 			for(int i = 0;i < getTabCount(); i++){
 				Component comp = getTabComponentAt(i);
 				if(comp instanceof AddTabPanel){
 					int r = indexOfTabComponent(comp);
 					if (r != -1) {
+						System.out.println("+ foudn adn removed");
 						this.remove(i);
 					}
 				}
@@ -106,14 +114,11 @@ public class TabbedPanel extends JTabbedPane{
 			closeBut.setEnabled(false);
 			closeBut.setVisible(false);
 		}
-
 		public void setClosable(boolean closable){
 			closeBut.setEnabled(closable);
 			closeBut.setVisible(closable);
 		}
 	}
-
-
 	/**
 	 * For use as a TabLabel, clicking will allow user to add an additional script tab
 	 */
@@ -129,7 +134,43 @@ public class TabbedPanel extends JTabbedPane{
 			add(label);
 			this.addMouseListener(new java.awt.event.MouseAdapter() {
 				public void mouseClicked(java.awt.event.MouseEvent evt) {
-					//TODO make popup to allow user to select which scriptName to add
+					final JPanel panel = new JPanel();
+					panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
+
+					final JComboBox<String> scriptNamesList = new JComboBox<String>();
+					for(String script : scriptNames){
+						scriptNamesList.addItem(script);
+					}
+					scriptNamesList.setEditable(true);
+
+					JButton addBut = new JButton("Add");
+					JButton cancelBut = new JButton("Cancel");
+
+
+					panel.add(scriptNamesList);
+					panel.add(addBut);
+					panel.add(cancelBut);
+					panel.setVisible(true);
+
+					final Integer layer = Window.createIFrame("popupcustom", null, panel);
+
+					addBut.setAction(new AbstractAction("Add") {
+						private static final long serialVersionUID = 1L;
+						public void actionPerformed(ActionEvent evt){
+							String name = ((String)scriptNamesList.getSelectedItem());
+							if(!name.isEmpty() && !name.equals(" ")){
+								TabbedPanel.this.addTab(name, "");
+								//panel.setVisible(false);//TODO until easier method to close the popup
+								Window.deleteIFrame(layer);
+							}
+						}
+					});
+					cancelBut.setAction(new AbstractAction("Cancel") {
+						private static final long serialVersionUID = 1L;
+						public void actionPerformed(ActionEvent evt){
+							Window.deleteIFrame(layer);
+						}
+					});
 				}
 			});
 		}
@@ -161,6 +202,7 @@ public class TabbedPanel extends JTabbedPane{
 	 * Changes whether each Tab's content may be editted
 	 */
 	public void updateEditablilty(boolean editable){
+		this.editable = editable;
 		for (Component comp : this.getComponents()) {
 			if (comp instanceof RTextScrollPane) {
 				RTextArea textArea = ((RTextScrollPane) comp).getTextArea();

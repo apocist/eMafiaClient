@@ -27,7 +27,7 @@ public class Data {
 	public int characterId = 0;
 	public Map<Integer, CharacterData> characterData = new LinkedHashMap<Integer, CharacterData>();
 	public HtmlPane chatOutput = new HtmlPane();
-	public RoleDataDisplay roleView = new RoleDataDisplay(false);
+	public RoleDataDisplay roleView;
 	public DefaultListModel<List_Character> playerListModel = new DefaultListModel<List_Character>();
 	//public JList<Object> playerList = new JList<Object>(playerListModel);
 	public JXList playerList = new JXList(playerListModel);
@@ -41,6 +41,7 @@ public class Data {
 	public Data(Framework framework){
 		this.Framework = framework;
 		this.curMatch = new Match(Framework);
+		roleView = new RoleDataDisplay(Framework.Window, false);
 
 		playerList.setComparator(new Comparator_PlayerLobby());
 		playerList.setAutoCreateRowSorter(true);
