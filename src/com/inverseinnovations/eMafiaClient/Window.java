@@ -230,6 +230,9 @@ public class Window extends Frame {
 		case "roleView":
 			frame = window_roleView(layer, parameters[0]);
 			break;
+		case "roleNew":
+			frame = window_roleNew(layer);
+			break;
 		case "popup":
 			frame = window_popup(parameters[0], parameters[1],parameters[2], layer);
 			break;
@@ -491,7 +494,6 @@ public class Window extends Frame {
 		JPanel buttons = new JPanel();
 		buttons.setLayout(new BoxLayout(buttons, BoxLayout.X_AXIS));
 		JButton createBut = new JButton("Create");
-
 		createBut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				Framework.Telnet.write("-match create");
@@ -503,8 +505,73 @@ public class Window extends Frame {
 				Framework.Telnet.write("-match list");
 			}
 		});
+		JButton menuBut = new JButton("Menu");
+		menuBut.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				//XXX
+				final JPanel panel = new JPanel();
+				panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+				JButton rolesBut = new JButton("Role List");
+				JButton doneBut = new JButton("Done");
+
+
+				panel.add(rolesBut);
+				panel.add(doneBut);
+				panel.setVisible(true);
+
+				final Integer layer = createIFrame("popupcustom", null, panel);
+
+				//
+
+				//
+				rolesBut.setAction(new AbstractAction("Roles") {
+					private static final long serialVersionUID = 1L;
+					public void actionPerformed(ActionEvent evt){
+						deleteIFrame(layer);
+						final JPanel roleSearchPanel = new JPanel();
+						roleSearchPanel.setLayout(new BoxLayout(roleSearchPanel,BoxLayout.Y_AXIS));
+						JPanel createDonePanel = new JPanel();
+						createDonePanel.setLayout(new BoxLayout(createDonePanel,BoxLayout.X_AXIS));
+						JButton createBut = new JButton("Create");
+						JButton doneBut = new JButton("Done");
+						createDonePanel.add(createBut);
+						createDonePanel.add(doneBut);
+
+						roleSearchPanel.add(new JLabel("Roles"));
+						roleSearchPanel.add(new RoleSearchPane(Framework));
+						roleSearchPanel.add(createDonePanel);
+
+
+						final Integer layer = createIFrame("popupcustom", null, roleSearchPanel);
+
+						createBut.setAction(new AbstractAction("Create") {
+							private static final long serialVersionUID = 1L;
+							public void actionPerformed(ActionEvent evt){
+								createIFrame("roleNew");
+							}
+						});
+						doneBut.setAction(new AbstractAction("Done") {
+							private static final long serialVersionUID = 1L;
+							public void actionPerformed(ActionEvent evt){
+								deleteIFrame(layer);
+							}
+						});
+
+
+					}
+				});
+				doneBut.setAction(new AbstractAction("Done") {
+					private static final long serialVersionUID = 1L;
+					public void actionPerformed(ActionEvent evt){
+						deleteIFrame(layer);
+					}
+				});
+			}
+		});
 		buttons.add(refreshBut);
 		buttons.add(createBut);
+		buttons.add(menuBut);
 
 		JPanel matchPanel = new JPanel();
 		matchPanel.setLayout(new BoxLayout(matchPanel, BoxLayout.Y_AXIS));
@@ -1380,6 +1447,42 @@ public class Window extends Frame {
 				Framework.Telnet.write("-roleview "+roleId);
 			}
 		}
+		frame.setSize(frame.getPreferredSize());
+		frame.setPack(true);
+		frame.setAutoCenter();
+		return frame;
+	}
+
+	private JAutoPanel window_roleNew(final Integer layer) {
+		JAutoPanel frame = new JAutoPanel(this.desktop);
+
+		Framework.Data.roleView = new RoleDataDisplay(this, true);
+		final JButton dialogSaveBut = new JButton("Save");
+		JButton dialogDoneBut = new JButton("Cancel");
+		dialogSaveBut.setAction(new AbstractAction("Save") {
+			private static final long serialVersionUID = 1L;
+			public void actionPerformed(ActionEvent evt) {
+				Framework.Telnet.write("-rolecreate", Framework.Data.roleView.convertToRoleData());
+				deleteIFrame(layer);// delets the poplayer
+			}
+		});
+		dialogDoneBut.setAction(new AbstractAction("Cancel") {
+			private static final long serialVersionUID = 1L;
+			public void actionPerformed(ActionEvent evt) {
+				deleteIFrame(layer);// delets the poplayer
+			}
+		});
+
+		JPanel buttonRow = new JPanel();
+		buttonRow.setLayout(new BoxLayout(buttonRow, BoxLayout.X_AXIS));
+		buttonRow.add(dialogSaveBut);buttonRow.add(dialogDoneBut);
+
+		JPanel mainP = new JPanel();
+		mainP.setLayout(new BoxLayout(mainP, BoxLayout.Y_AXIS));
+		mainP.add(Framework.Data.roleView);
+		mainP.add(buttonRow);
+		frame.add(mainP);
+
 		frame.setSize(frame.getPreferredSize());
 		frame.setPack(true);
 		frame.setAutoCenter();

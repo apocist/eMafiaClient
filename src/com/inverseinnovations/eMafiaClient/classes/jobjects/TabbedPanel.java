@@ -78,6 +78,7 @@ public class TabbedPanel extends JTabbedPane{
 			add("+", null);
 			setTabComponentAt(getTabCount()-1, new AddTabPanel());
 		}
+		Window.autoUpdateJAutoPanels();
 	}
 
 	public void addTabSet(Map<String, String> set){
