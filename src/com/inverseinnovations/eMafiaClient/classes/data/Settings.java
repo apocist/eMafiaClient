@@ -8,8 +8,8 @@ public class Settings {
 	Properties p = new Properties();
 	public int CLIENT_BUILD;
 	public String SERVER_URL = "www.inverseinnovations.com";
-	//public String SERVER_PORT = "3689";//Public server
-	public String SERVER_PORT = "1234";//Dev server
+	public String SERVER_PORT = "3689";//Public server
+	//public String SERVER_PORT = "1234";//Dev server
 
 	public Settings(){
 		try{
