@@ -110,22 +110,16 @@ public class List_AlivePlayer extends JPanel{
 	}
 
 	public void dayVoting(int curPlayerNum, int[] targetsD1, int[] targetsD2){
-		//this.removeAll();
-		//this.add(playerNum,BorderLayout.WEST);
-		//this.add(playerName,BorderLayout.CENTER);
 		setAllNotVisible();
 		playerName.setVisible(true);
 		playerNum.setVisible(true);
 		if(curPlayerNum != id){
-			//this.add(voteBut,BorderLayout.EAST);
 			voteBut.setVisible(true);
 		}
 		if(targetsD1[0] == -1 || ((targetsD1[0] == -3) && (curPlayerNum == id)) || ((targetsD1[0] == -2) && (curPlayerNum != id))){//if everyone or self
-			//this.add(target1But,BorderLayout.EAST);
 			target1But.setVisible(true);
 		}
 		if(targetsD2[0] == -1 || ((targetsD2[0] == -3) && (curPlayerNum == id)) || ((targetsD2[0] == -2) && (curPlayerNum != id))){//if everyone or self
-			//this.add(target2But,BorderLayout.EAST);
 			target2But.setVisible(true);
 		}
 	}
