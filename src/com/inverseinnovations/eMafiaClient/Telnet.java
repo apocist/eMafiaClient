@@ -162,7 +162,7 @@ public class Telnet {
 			array.append(dataSize);
 			if(data != null){array.append(dataBytes);}
 			array.append(new byte[]{(byte) 0xff});
-			//TODO more to go
+			//TODO more to go?
 			//{00}{cmdSize(1 byte)}{commandBytes(up to 255 bytes)}{FF}{FF}
 			//new end
 			//out.println(string);

@@ -36,7 +36,7 @@ public class DataPacket {
 		return control;
 	}
 	/**Returns the name of the command being sent*/
-	public String getCommand(){//TODO should make this a map instead
+	public String getCommand(){
 		String r = "Unknown";
 		switch(control){
 		//-Connection-// 0 - 9

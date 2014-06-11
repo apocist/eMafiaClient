@@ -2,8 +2,6 @@
 Copyright (C) 2012  Matthew 'Apocist' Davis */
 package com.inverseinnovations.eMafiaClient;
 
-//TODO need to MD5 the registration/verify password
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -341,16 +339,6 @@ public class Window extends Frame {
 		// Match screen
 
 		// Graveyard List
-
-		/*
-		 * Framework.Data.curMatch.deadList.setSelectionMode(ListSelectionModel.
-		 * SINGLE_SELECTION);//TODO no need to select graveyard
-		 * Framework.Data.curMatch
-		 * .deadList.setLayoutOrientation(JList.VERTICAL);
-		 * Framework.Data.curMatch.deadList.setBackground(new Color(32,32,32));
-		 * Framework.Data.curMatch.deadList.setCellRenderer(CellRenderer.new
-		 * MatchDeadList());
-		 */
 		JScrollPane graveyardScrollpane = new JScrollPane(
 				Framework.Data.curMatch.deadList);
 		JAutoPanel graveyardPanel = new JAutoPanel(desktop);
@@ -1345,7 +1333,6 @@ public class Window extends Frame {
 			public void actionPerformed(ActionEvent evt) {
 				Framework.Data.roleView.updateEditablilty(false);
 				dialogSaveBut.setVisible(false);
-				//TODO upload to server
 				Framework.Telnet.write("-roleedit", Framework.Data.roleView.convertToRoleData());
 				dialogEditBut.setVisible(true);
 

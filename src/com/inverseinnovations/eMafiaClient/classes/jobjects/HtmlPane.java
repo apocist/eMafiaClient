@@ -20,7 +20,7 @@ public class HtmlPane extends JTextPane {
 	public HtmlPane(){
 		setEditorKit(kit);
 		setDocument(doc);
-		setEditable(false);//XXX
+		setEditable(false);
 		setBackground(new Color(32,32,32));
 		//setForeground(new Color(255,255,255));
 		DefaultCaret caret = (DefaultCaret)this.getCaret();

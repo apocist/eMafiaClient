@@ -160,7 +160,6 @@ public class TabbedPanel extends JTabbedPane{
 							String name = ((String)scriptNamesList.getSelectedItem());
 							if(!name.isEmpty() && !name.equals(" ")){
 								TabbedPanel.this.addTab(name, "");
-								//panel.setVisible(false);//TODO until easier method to close the popup
 								Window.deleteIFrame(layer);
 							}
 						}
